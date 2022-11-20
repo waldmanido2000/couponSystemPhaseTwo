@@ -22,5 +22,5 @@ public class Company {
 	private String password;
 	@OneToMany(mappedBy = "company", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
 	@Singular
-		private List<Coupon> books;
+		private List<Coupon> coupons;
 }

@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -28,5 +29,8 @@ public class Customer {
     @ManyToMany
     @JsonIgnore
     @ToString.Exclude
-    private List<Coupon> coupons = new ArrayList<>();
+    @JoinTable(name = "customers_coupons", joinColumns = {
+            @JoinColumn(name = "customer_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "coupons_id") })
+    private List<Coupon> coupons;
 }

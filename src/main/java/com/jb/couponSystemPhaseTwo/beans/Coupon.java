@@ -5,7 +5,9 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -18,6 +20,7 @@ public class Coupon {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //generated value per entity
     private int id;
     @Column(length = 40, nullable = false)
+    @Enumerated(EnumType.STRING)
     private Category category;
     @Column(length = 40, nullable = false)
     private String title;
@@ -37,4 +40,7 @@ public class Coupon {
     @JsonIgnore
     @ToString.Exclude
     private Company company;
+
+    @ManyToMany(mappedBy = "coupons")
+    private List<Customer> customers;
 }
