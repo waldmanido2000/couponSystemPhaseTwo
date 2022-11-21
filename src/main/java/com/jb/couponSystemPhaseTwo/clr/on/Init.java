@@ -4,6 +4,8 @@ import com.jb.couponSystemPhaseTwo.beans.Category;
 import com.jb.couponSystemPhaseTwo.beans.Company;
 import com.jb.couponSystemPhaseTwo.beans.Coupon;
 import com.jb.couponSystemPhaseTwo.beans.Customer;
+import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
+import com.jb.couponSystemPhaseTwo.exceptions.ErrorMessage;
 import com.jb.couponSystemPhaseTwo.repos.CompanyRepo;
 import com.jb.couponSystemPhaseTwo.repos.CouponRepo;
 import com.jb.couponSystemPhaseTwo.repos.CustomerRepo;
@@ -49,7 +51,6 @@ public class Init implements CommandLineRunner {
         addCustomers();
         customerRepo.findAll().forEach(System.out::println);
         addCouponPurchase();
-        customerRepo.deletePurchase(10,100);
     }
 
     private void addCompanies() {
@@ -108,11 +109,10 @@ public class Init implements CommandLineRunner {
     }
     private void addCouponPurchase(){
         showDescription("|--->\tadding purchases to DB");
-        for (Customer customer:
-             customerRepo.findAll()) {
-            System.out.println(customer.getId());
-            customer.setCoupons(couponRepo.findAll());
-            customerRepo.saveAndFlush(customer);
+        for (int i = 1; i <= customerRepo.count(); i++) {
+            for (int j = 0; j < 5; j++) {
+                customerRepo.addPurchase(i,i*10-j);
+            }
         }
     }
 

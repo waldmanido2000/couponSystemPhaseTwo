@@ -2,6 +2,7 @@ package com.jb.couponSystemPhaseTwo.beans;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.engine.internal.Cascade;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class Customer {
     private String email;
     @Column(length = 40, nullable = false)
     private String password;
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JsonIgnore
     @ToString.Exclude
     @JoinTable(name = "customers_coupons", joinColumns = {
