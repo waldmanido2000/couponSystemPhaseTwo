@@ -2,9 +2,11 @@ package com.jb.couponSystemPhaseTwo.beans;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.engine.internal.Cascade;
 
 import javax.persistence.*;
+import java.lang.annotation.Repeatable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -30,8 +32,11 @@ public class Customer {
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JsonIgnore
     @ToString.Exclude
-    @JoinTable(name = "customers_coupons", joinColumns = {
-            @JoinColumn(name = "customer_id") }, inverseJoinColumns = {
-            @JoinColumn(name = "coupons_id") })
+    @PrimaryKeyJoinColumns({@PrimaryKeyJoinColumn(name = "customer_id"), @PrimaryKeyJoinColumn(name = "coupons_id")})
+    @JoinTable(name = "customers_coupons"
+            , joinColumns = { @JoinColumn(name = "customer_id") }
+            , inverseJoinColumns = { @JoinColumn(name = "coupons_id") }
+            , uniqueConstraints = { @UniqueConstraint(columnNames = { "customer_id", "coupons_id" }) }
+    )
     private List<Coupon> coupons;
 }

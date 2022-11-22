@@ -14,17 +14,17 @@ import java.util.List;
 public interface CompanyService {
     boolean login(String email, String password) throws SQLException, CouponSystemException;
 
-    void addCoupon(Coupon coupon) throws SQLException, CouponSystemException;
+    void addCoupon(int companyId, Coupon coupon) throws SQLException, CouponSystemException;
 
-    void updateCoupon(int couponId, Coupon coupon) throws SQLException, CouponSystemException;
+    void updateCoupon(int companyId, int couponId, Coupon coupon) throws SQLException, CouponSystemException;
 
-    void deleteCoupon(int couponId) throws SQLException, CouponSystemException;
+    void deleteCoupon(int companyId, int couponId) throws SQLException, CouponSystemException;
 
-    List<Coupon> getCompanyCoupons() throws SQLException;
+    List<Coupon> getCompanyCoupons(int companyId) throws SQLException;
 
-    List<Coupon> getCompanyCoupons(Category category) throws SQLException;
+    List<Coupon> getCompanyCoupons(int companyId, Category category) throws SQLException;
 
-    ArrayList<Coupon> getCompanyCoupons(double maxPrice) throws SQLException;
+    ArrayList<Coupon> getCompanyCoupons(int companyId, double maxPrice) throws SQLException;
 
-    Company getCompanyDetails() throws SQLException;
+    Company getCompanyDetails(int companyId) throws SQLException;
 }

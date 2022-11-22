@@ -43,6 +43,7 @@ public class Init implements CommandLineRunner {
 
 
     private void demoEntities() throws SQLException {
+        showDescription("altering customers_coupons table pks");
         showDescription("adding entities to DB:");
         addCompanies();
         companyRepo.findAll().forEach(System.out::println);
@@ -51,6 +52,7 @@ public class Init implements CommandLineRunner {
         addCustomers();
         customerRepo.findAll().forEach(System.out::println);
         addCouponPurchase();
+        customerRepo.addPurchase(10,80);
     }
 
     private void addCompanies() {
