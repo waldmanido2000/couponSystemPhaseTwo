@@ -7,7 +7,6 @@ import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,7 +23,7 @@ public interface CompanyService {
 
     List<Coupon> getCompanyCoupons(int companyId, Category category) throws SQLException;
 
-    ArrayList<Coupon> getCompanyCoupons(int companyId, double maxPrice) throws SQLException;
+    List<Coupon> getCompanyCoupons(int companyId, double maxPrice) throws SQLException;
 
-    Company getCompanyDetails(int companyId) throws SQLException;
+    Company getCompanyDetails(int companyId) throws SQLException, CouponSystemException;
 }

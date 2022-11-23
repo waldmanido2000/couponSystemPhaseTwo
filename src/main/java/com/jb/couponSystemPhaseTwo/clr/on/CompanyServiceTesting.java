@@ -2,6 +2,7 @@ package com.jb.couponSystemPhaseTwo.clr.on;
 
 
 import com.jb.couponSystemPhaseTwo.beans.Category;
+import com.jb.couponSystemPhaseTwo.beans.Company;
 import com.jb.couponSystemPhaseTwo.beans.Coupon;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.services.*;
@@ -11,6 +12,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Field;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -39,12 +41,11 @@ public class CompanyServiceTesting implements CommandLineRunner {
 
     }
 
-    private void companyServiceTest() throws SQLException, CouponSystemException {
+    private void companyServiceTest() throws SQLException {
 
         int companyId = 1;
         Coupon coupon = Coupon.builder()
                 .description("description...............")
-                .title("title ..............")
                 .price(130.4)
                 .image("http://www.image.com")
                 .category(Category.FOOD)
@@ -56,42 +57,74 @@ public class CompanyServiceTesting implements CommandLineRunner {
         int couponId = 1;
         Category category = Category.CLOTHES;
 
+        controlDescription("|--->\tcompany coupons");
+        companyService.getCompanyCoupons(companyId).forEach(System.out::println);
+        failDescription("|--->\tcompany addCoupon (already exists)");
+        coupon.setTitle("title 1");
+        try {
+            companyService.addCoupon(companyId, coupon);
+        } catch (CouponSystemException e) {
+            System.out.println(e.getMessage());
+        }
+        successDescription("|--->\tcompany addCoupon success");
+        coupon.setTitle("new coupon");
+        try {
+            companyService.addCoupon(companyId, coupon);
+        } catch (CouponSystemException e) {
+            System.out.println(e.getMessage());
+        }
+        controlDescription("|--->\tcompany coupons");
+        companyService.getCompanyCoupons(companyId).forEach(System.out::println);
 
-        failDescription("|--->\tcompany addCoupon");
-        companyService.addCoupon(companyId, coupon);// TODO: 11/22/2022
-        successDescription("|--->\tcompany addCoupon");
-        companyService.addCoupon(companyId, coupon);
+        failDescription("|--->\tcompany updateCoupon (wrong coupon id)");
+        try {
+            companyService.updateCoupon(companyId, 500, coupon);
+        } catch (CouponSystemException e) {
+            System.out.println(e.getMessage());
+        }
 
-        failDescription("|--->\tcompany updateCoupon");// TODO: 11/22/2022  
-        companyService.updateCoupon(companyId, companyId, coupon);
         successDescription("|--->\tcompany updateCoupon");
-        companyService.updateCoupon(companyId, companyId, coupon);
+        coupon.setTitle("updated title");
+        try {
+            companyService.updateCoupon(companyId, 101, coupon);
+        } catch (CouponSystemException e) {
+            System.out.println(e.getMessage());
+        }
+        controlDescription("|--->\tcompany coupons");
+        companyService.getCompanyCoupons(companyId).forEach(System.out::println);
 
-        failDescription("|--->\tcompany deleteCoupon");// TODO: 11/22/2022  
-        companyService.deleteCoupon(companyId, couponId);
-        successDescription("|--->\tcompany add coupon");
-        companyService.deleteCoupon(companyId, couponId);
+        failDescription("|--->\tcompany deleteCoupon (not exist)");
+        try {
+            companyService.deleteCoupon(companyId, 800);
+        } catch (CouponSystemException e) {
+            System.out.println(e.getMessage());
+        }
+        successDescription("|--->\tcompany deleteCoupon success");
+        try {
+            companyService.deleteCoupon(companyId, 10);
+        } catch (CouponSystemException e) {
+            System.out.println(e.getMessage());
+        }
+        controlDescription("|--->\tcompany coupons");
+        companyService.getCompanyCoupons(companyId).forEach(System.out::println);
 
-        failDescription("|--->\tcompany getCompanyCoupons");// TODO: 11/22/2022  
-        companyService.getCompanyCoupons(companyId);
-        successDescription("|--->\tcompany getCompanyCoupons");
-        companyService.getCompanyCoupons(companyId);
+        successDescription("|--->\tcompany getCompanyCoupons by category");
+        companyService.getCompanyCoupons(companyId, category).forEach(System.out::println);
 
-        failDescription("|--->\tcompany getCompanyCoupons");// TODO: 11/22/2022  
-        companyService.getCompanyCoupons(companyId, category);
-        successDescription("|--->\tcompany getCompanyCoupons");
-        companyService.getCompanyCoupons(companyId, category);
+        successDescription("|--->\tcompany getCompanyCoupons by maxPrice");
+        companyService.getCompanyCoupons(companyId, maxPrice).forEach(System.out::println);
 
-        failDescription("|--->\tcompany getCompanyCoupons");// TODO: 11/22/2022  
-        companyService.getCompanyCoupons(companyId, maxPrice);
-        successDescription("|--->\tcompany getCompanyCoupons");
-        companyService.getCompanyCoupons(companyId, maxPrice);
-
-        failDescription("|--->\tcompany getCompanyDetails");// TODO: 11/22/2022
-        companyService.getCompanyDetails(companyId);
         successDescription("|--->\tcompany getCompanyDetails");
-        companyService.getCompanyDetails(companyId);
-
+        try {
+            Company company = companyService.getCompanyDetails(companyId);
+            System.out.println("company.getId() = " + company.getId());
+            System.out.println("company.getName() = " + company.getName());
+            System.out.println("company.getEmail() = " + company.getEmail());
+            System.out.println("company.getPassword() = " + company.getPassword());
+            company.getCoupons().forEach(System.out::println);
+        } catch (CouponSystemException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void failDescription(String description) {

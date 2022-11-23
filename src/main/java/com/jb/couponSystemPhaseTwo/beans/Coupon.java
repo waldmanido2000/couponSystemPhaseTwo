@@ -42,5 +42,7 @@ public class Coupon {
     private Company company;
 
     @ManyToMany(mappedBy = "coupons")
+    @ToString.Exclude
+    @JsonIgnore
     private List<Customer> customers;
 }
