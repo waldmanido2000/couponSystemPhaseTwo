@@ -46,11 +46,8 @@ public class Init implements CommandLineRunner {
         showDescription("altering customers_coupons table pks");
         showDescription("adding entities to DB:");
         addCompanies();
-        companyRepo.findAll().forEach(System.out::println);
         addCoupons();
-
         addCustomers();
-        customerRepo.findAll().forEach(System.out::println);
         addCouponPurchase();
         customerRepo.addPurchase(10,80);
     }
@@ -91,7 +88,6 @@ public class Init implements CommandLineRunner {
                         .build();
                 coupons.add(couponTemp);
             }
-            coupons.forEach(System.out::println);
             couponRepo.saveAll(coupons);
         }
     }

@@ -21,9 +21,13 @@ public interface CustomerRepo extends JpaRepository<Customer, Integer> {
     @Transactional
     @Query(value = "DELETE FROM `coupon-system-phase-two`.`customers_coupons` WHERE (`customer_id` = ?) and (`coupons_id` = ?);", nativeQuery = true)
     void deletePurchase(int customer_id, int coupon_id);
+
     @Modifying
     @Transactional
     @Query(value = "ALTER TABLE `coupon-system-phase-two`.`customers_coupons` \n" +
             "ADD PRIMARY KEY (`customer_id`, `coupons_id`);", nativeQuery = true)
     void alterTable();
+
+    @Query
+    boolean existsByEmail(String email);
 }

@@ -12,13 +12,8 @@ import java.sql.SQLException;
 
 @Component
 @Order(2)
-public class CouponSystemTesting implements CommandLineRunner {
-    /* testing legend attributes */
-    private static final String FAIL = AnticipatedResult.FAIL.getMessage();
-    private static final String CONTROL = AnticipatedResult.CONTROL.getMessage();
-    private static final String SUCCESS = AnticipatedResult.SUCCESS.getMessage();
-    private static final String RESET_TEXT = AnticipatedResult.RESET.getMessage();
-    private static final String FLAG_NAME = "TEST_DEBUG_MODE";
+public class CouponSystemTesting extends ServicesTesting implements CommandLineRunner {
+
     /* login attributes */
     private static final String WRONG_EMAIL = "wrong@email.com";
     private static final String WRONG_PASSWORD = "WRONG";
@@ -44,7 +39,7 @@ public class CouponSystemTesting implements CommandLineRunner {
         adminLogin();
         companyLogin();
         custmoerLogin();
-
+        controlDescription("\t\ttesting loginManager ended\n");
     }
 
     private void adminLogin() throws SQLException, CouponSystemException {
@@ -81,18 +76,6 @@ public class CouponSystemTesting implements CommandLineRunner {
             System.out.println(e.getMessage());
         }
         return null;
-    }
-
-    private void failDescription(String description) {
-        Debug.showDescription(FLAG_NAME, FAIL + description + "\t\t" + RESET_TEXT);
-    }
-
-    private void successDescription(String description) {
-        Debug.showDescription(FLAG_NAME, SUCCESS + description + "\t\t" + RESET_TEXT);
-    }
-
-    private void controlDescription(String description) {
-        Debug.showDescription(FLAG_NAME, CONTROL + description + "\t\t" + RESET_TEXT);
     }
 }
 
