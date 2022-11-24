@@ -39,12 +39,6 @@ public class AdminServiceImpl  extends ClientService implements AdminService{
         if (!companyRepo.existsById(companyId)) {
            throw  new CouponSystemException(ErrorMessage.COMPANY_NOT_EXIST);
         }
-        List<Coupon> companyCoupons = couponRepo.findByCompany_id(companyId);
-        Set<Integer> couponsId = new TreeSet<>();
-        for (Coupon coupon:
-                companyCoupons) {
-            couponsId.add(coupon.getId());
-        }
         couponRepo.deletePurchasesByCompany(companyId);
         companyRepo.deleteById(companyId);
     }
@@ -68,13 +62,21 @@ public class AdminServiceImpl  extends ClientService implements AdminService{
     }
 
     @Override
-    public void updateCustomer(int customerId, Customer customer) throws SQLException, CouponSystemException {
-
+    public void updateCustomer(int customerId, Customer customer) throws CouponSystemException {
+        if(!customerRepo.existsById(customerId)){
+            throw new CouponSystemException(ErrorMessage.CUSTOMER_NOT_EXIST);
+        }
+        customer.setId(customerId);
+        customerRepo.saveAndFlush(customer);
     }
 
     @Override
-    public void deleteCustomer(int customerId) throws SQLException, CouponSystemException {
-
+    public void deleteCustomer(int customerId) throws CouponSystemException {
+        if (!customerRepo.existsById(customerId)) {
+            throw  new CouponSystemException(ErrorMessage.CUSTOMER_NOT_EXIST);
+        }
+        couponRepo.deletePurchasesByCustomer(customerId);
+        customerRepo.deleteById(customerId);
     }
 
     @Override
@@ -83,8 +85,9 @@ public class AdminServiceImpl  extends ClientService implements AdminService{
     }
 
     @Override
-    public Customer getOneCustomer(int customerId) throws SQLException, CouponSystemException {
-        return null;
+    public Customer getOneCustomer(int customerId) throws CouponSystemException {
+        return customerRepo.findById(customerId)
+                .orElseThrow(() -> new CouponSystemException(ErrorMessage.CUSTOMER_NOT_EXIST));
     }
 
     @Override

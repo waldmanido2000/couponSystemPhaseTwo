@@ -28,6 +28,10 @@ public interface CouponRepo extends JpaRepository <Coupon, Integer> {
     @Modifying
     @Query(value = "DELETE from `coupon-system-phase-two`.customers_coupons WHERE coupons_id IN (SELECT id FROM `coupon-system-phase-two`.coupons where (company_id = ?));", nativeQuery = true)
     void deletePurchasesByCompany(int company_id);
+    @Transactional
+    @Modifying
+    @Query(value = "DELETE from `coupon-system-phase-two`.`customers_coupons` WHERE `customer_id` = ?;", nativeQuery = true)
+    void deletePurchasesByCustomer(int customer_id);
 
     @Query(value = "SELECT * FROM `coupon-system-phase-two`.coupons where (`company_id` = ?) and (price < ?);", nativeQuery = true)
     List<Coupon> findByCompany_idAndByMaxPrice(int companyId, double maxPrice);

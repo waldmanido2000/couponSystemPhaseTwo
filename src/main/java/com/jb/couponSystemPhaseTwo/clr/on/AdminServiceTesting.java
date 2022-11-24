@@ -32,10 +32,9 @@ public class AdminServiceTesting extends ServicesTesting implements CommandLineR
 //        deleteCompany(9);
 //        getOneCompany(11);
         addCustomer(customer);
-//        updateCustomer(10, customer);
-//        deleteCustomer(9);
-//        getAllCustomers();
-//        getOneCustomer(11);
+        updateCustomer(10, customer);
+        deleteCustomer(9);
+        getOneCustomer(11);
 
         controlDescription("\t\ttesting adminService ended\n");
     }
@@ -112,7 +111,7 @@ public class AdminServiceTesting extends ServicesTesting implements CommandLineR
     private void getOneCompany(int companyId) throws SQLException {
         successDescription("|--->\tadmin get one Company success");
         try {
-            Company company = companyService.getCompanyDetails(companyId);
+            Company company = adminService.getOneCompany(companyId);
             System.out.println(String.format("id = %s, name = %s, email = %s, password = %s\n",
                     company.getId(), company.getName(), company.getEmail(), company.getPassword()));
 
@@ -143,15 +142,55 @@ public class AdminServiceTesting extends ServicesTesting implements CommandLineR
         adminService.getAllCustomers().forEach(System.out::println);
     }
 
-    private void updateCustomer(int customerId, Customer customer) {
-        // TODO: 11/24/2022
+    private void updateCustomer(int customerId, Customer customer) throws SQLException {
+        failDescription("|--->\tadmin update customer (customer not exists)");
+        try {
+            adminService.updateCustomer(900,customer);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (CouponSystemException e) {
+            System.out.println(e.getMessage());
+        }
+        successDescription("|--->\tadmin update customer success");
+        customer.setPassword("updated password");
+        try {
+            adminService.updateCustomer(customerId,customer);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (CouponSystemException e) {
+            System.out.println(e.getMessage());
+        }
+        controlDescription("|--->\tcustomers");
+        adminService.getAllCustomers().forEach(System.out::println);
     }
 
-    private void deleteCustomer(int customerId) {
-        // TODO: 11/24/2022
+    private void deleteCustomer(int customerId) throws SQLException {
+        failDescription("|--->\tadmin deleteCustomer (customer not exists)");
+        try {
+            adminService.deleteCustomer(800);
+        } catch (CouponSystemException e) {
+            System.out.println(e.getMessage());
+        }
+        controlDescription("|--->\tcustomers");
+        successDescription("|--->\tadmin deleteCustomer success");
+        try {
+            adminService.deleteCustomer(customerId);
+        } catch (CouponSystemException e) {
+            System.out.println(e.getMessage());
+        }
+        controlDescription("|--->\tcustomers");
+        adminService.getAllCustomers().forEach(System.out::println);
     }
 
-    private void getOneCustomer(int customerId) {
-        // TODO: 11/24/2022
+    private void getOneCustomer(int customerId) throws SQLException {
+        successDescription("|--->\tadmin get one customer success");
+        try {
+            Customer customer = adminService.getOneCustomer(customerId);
+            System.out.println(String.format("id = %s, first name = %s, last name = %s, email = %s, password = %s\n",
+                    customer.getId(), customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getPassword()));
+        }
+        catch (CouponSystemException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
