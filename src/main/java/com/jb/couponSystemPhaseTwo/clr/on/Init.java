@@ -42,7 +42,7 @@ public class Init implements CommandLineRunner {
     }
 
 
-    private void demoEntities() throws SQLException {
+    private void demoEntities() {
         showDescription("altering customers_coupons table pks");
         showDescription("adding entities to DB:");
         addCompanies();
@@ -75,6 +75,40 @@ public class Init implements CommandLineRunner {
                 LocalDate randomLocalDate = LocalDate.now();
                 Date startDate = Date.valueOf(randomLocalDate);
                 Date endDate = Date.valueOf(randomLocalDate.plusDays(random.nextInt(28)));
+                Coupon couponTemp = Coupon.builder()
+                        .startDate(startDate)
+                        .endDate(endDate)
+                        .amount(random.nextInt(200) + 100)
+                        .category(Category.values()[(i) % 6])
+                        .company(company)
+                        .image( "url" + i)
+                        .price(random.nextInt(300) + 1)
+                        .title("title " + i)
+                        .description("description " + i)
+                        .build();
+                coupons.add(couponTemp);
+            }
+            for (int i = 1; i < 3; i++) {
+                LocalDate randomLocalDate = LocalDate.now();
+                Date startDate = Date.valueOf(randomLocalDate);
+                Date endDate = Date.valueOf(randomLocalDate.plusDays(random.nextInt(28)));
+                Coupon couponTemp = Coupon.builder()
+                        .startDate(startDate)
+                        .endDate(endDate)
+                        .amount(0)
+                        .category(Category.values()[(i) % 6])
+                        .company(company)
+                        .image( "url" + i)
+                        .price(random.nextInt(300) + 1)
+                        .title("title " + i)
+                        .description("description " + i)
+                        .build();
+                coupons.add(couponTemp);
+            }
+            for (int i = 1; i < 3; i++) {
+                LocalDate randomLocalDate = LocalDate.now();
+                Date startDate = Date.valueOf(randomLocalDate.minusDays(10));
+                Date endDate = Date.valueOf(randomLocalDate.minusDays(1));
                 Coupon couponTemp = Coupon.builder()
                         .startDate(startDate)
                         .endDate(endDate)

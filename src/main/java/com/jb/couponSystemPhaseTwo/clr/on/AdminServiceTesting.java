@@ -27,15 +27,14 @@ public class AdminServiceTesting extends ServicesTesting implements CommandLineR
     @Override
     public void run(String... args) throws Exception {
         controlDescription("\t\ttesting adminService\n");
-//        addCompany(company);
-//        updateCompany(10, company);
-//        deleteCompany(9);
-//        getOneCompany(11);
+        addCompany(company);
+        updateCompany(10, company);
+        deleteCompany(9);
+        getOneCompany(11);
         addCustomer(customer);
         updateCustomer(10, customer);
         deleteCustomer(9);
         getOneCustomer(11);
-
         controlDescription("\t\ttesting adminService ended\n");
     }
 
@@ -112,8 +111,8 @@ public class AdminServiceTesting extends ServicesTesting implements CommandLineR
         successDescription("|--->\tadmin get one Company success");
         try {
             Company company = adminService.getOneCompany(companyId);
-            System.out.println(String.format("id = %s, name = %s, email = %s, password = %s\n",
-                    company.getId(), company.getName(), company.getEmail(), company.getPassword()));
+            System.out.printf("id = %s, name = %s, email = %s, password = %s\n%n",
+                    company.getId(), company.getName(), company.getEmail(), company.getPassword());
 
         } catch (CouponSystemException e) {
             System.out.println(e.getMessage());
@@ -186,8 +185,8 @@ public class AdminServiceTesting extends ServicesTesting implements CommandLineR
         successDescription("|--->\tadmin get one customer success");
         try {
             Customer customer = adminService.getOneCustomer(customerId);
-            System.out.println(String.format("id = %s, first name = %s, last name = %s, email = %s, password = %s\n",
-                    customer.getId(), customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getPassword()));
+            System.out.printf("id = %s, first name = %s, last name = %s, email = %s, password = %s\n%n",
+                    customer.getId(), customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getPassword());
         }
         catch (CouponSystemException e) {
             System.out.println(e.getMessage());

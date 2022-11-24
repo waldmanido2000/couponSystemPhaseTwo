@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public interface CouponRepo extends JpaRepository <Coupon, Integer> {
@@ -16,6 +15,10 @@ public interface CouponRepo extends JpaRepository <Coupon, Integer> {
     boolean existsByCompany_idAndTitle(int Company_id, String title);
     @Query
     List<Coupon> findByCompany_id(int companyId);
+    @Transactional
+    @Modifying
+    @Query(value = "INSERT INTO `coupon-system-phase-two`.`customers_coupons` (`customer_id`, `coupons_id`) VALUES (?, ?);\n", nativeQuery = true)
+    void addPurchase(int customer_id, int coupon_id);
     @Query
     @Transactional
     @Modifying
@@ -37,4 +40,25 @@ public interface CouponRepo extends JpaRepository <Coupon, Integer> {
     List<Coupon> findByCompany_idAndByMaxPrice(int companyId, double maxPrice);
     @Query(value = "SELECT * FROM `coupon-system-phase-two`.coupons where (`company_id` = ?) and (category = ?);", nativeQuery = true)
     List<Coupon> findByCompany_idAndByCategory(int companyId, String category);
+    @Query(value = "SELECT COUNT(*)  as res FROM `coupon-system-phase-two`.customers_coupons where customer_id = ? and coupons_id = ?;" ,nativeQuery = true)
+    int isPurchased(int customer_id, int coupon_id);
+
+    @Query(value = "select * from `coupon-system-phase-two`.coupons where id in (SELECT `coupon-system-phase-two`.coupons.id as res\n" +
+            "FROM `coupon-system-phase-two`.coupons \n" +
+            "JOIN `coupon-system-phase-two`.customers_coupons \n" +
+            "ON `coupon-system-phase-two`.`customers_coupons`.coupons_id = `coupon-system-phase-two`.coupons.id \n" +
+            "where `coupon-system-phase-two`.`customers_coupons`.customer_id=?);", nativeQuery = true)
+    List<Coupon> findPurchasesByCustomer(int customer_id);
+    @Query(value = "select * from `coupon-system-phase-two`.coupons where id in (SELECT `coupon-system-phase-two`.coupons.id as res\n" +
+            "FROM `coupon-system-phase-two`.coupons \n" +
+            "JOIN `coupon-system-phase-two`.customers_coupons \n" +
+            "ON `coupon-system-phase-two`.`customers_coupons`.coupons_id = `coupon-system-phase-two`.coupons.id \n" +
+            "where (`coupon-system-phase-two`.`customers_coupons`.customer_id=?) and category = ?)", nativeQuery = true)
+    List<Coupon> findPurchasesByCustomerAndCategory(int customer_id, String category);
+    @Query(value = "select * from `coupon-system-phase-two`.coupons where id in (SELECT `coupon-system-phase-two`.coupons.id as res\n" +
+            "FROM `coupon-system-phase-two`.coupons \n" +
+            "JOIN `coupon-system-phase-two`.customers_coupons \n" +
+            "ON `coupon-system-phase-two`.`customers_coupons`.coupons_id = `coupon-system-phase-two`.coupons.id \n" +
+            "where (`coupon-system-phase-two`.`customers_coupons`.customer_id=?) and price < ?)", nativeQuery = true)
+    List<Coupon> findPurchasesByCustomerAndMaxPrice(int customer_id, double maxPrice);
 }

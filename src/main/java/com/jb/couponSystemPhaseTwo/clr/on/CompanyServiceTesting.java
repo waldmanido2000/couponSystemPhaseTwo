@@ -15,7 +15,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-//@Component
+@Component
 @Order(4)
 public class CompanyServiceTesting extends ServicesTesting implements CommandLineRunner{
     private final int companyId = 1;
@@ -110,8 +110,8 @@ public class CompanyServiceTesting extends ServicesTesting implements CommandLin
     private void getCompanyDetails() throws SQLException {
         try {
             Company company = companyService.getCompanyDetails(companyId);
-            System.out.println(String.format("id = %s, name = %s, email = %s, password = %s\n company's coupon list:",
-                    company.getId(), company.getName(), company.getEmail(), company.getPassword()));
+            System.out.printf("id = %s, name = %s, email = %s, password = %s\n company's coupon list:%n",
+                    company.getId(), company.getName(), company.getEmail(), company.getPassword());
 
             company.getCoupons().forEach(System.out::println);
         } catch (CouponSystemException e) {
