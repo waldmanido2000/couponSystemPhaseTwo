@@ -4,6 +4,7 @@ import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.services.*;
 import com.jb.couponSystemPhaseTwo.utils.Debug;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,7 @@ public class CouponSystemTesting extends ServicesTesting implements CommandLineR
     @Autowired
     private CustomerService customerService;
     @Autowired
+    @Qualifier("adminServiceImpl")
     private AdminService adminService;
     @Autowired
     private LoginManager loginManager;

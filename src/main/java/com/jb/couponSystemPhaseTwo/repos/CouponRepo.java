@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.sql.Date;
 import java.util.List;
 
 @Repository
@@ -31,6 +32,14 @@ public interface CouponRepo extends JpaRepository <Coupon, Integer> {
     @Modifying
     @Query(value = "DELETE from `coupon-system-phase-two`.customers_coupons WHERE coupons_id IN (SELECT id FROM `coupon-system-phase-two`.coupons where (company_id = ?));", nativeQuery = true)
     void deletePurchasesByCompany(int company_id);
+    @Transactional
+    @Modifying
+    @Query(value = "DELETE from `coupon-system-phase-two`.customers_coupons WHERE coupons_id IN (SELECT id FROM `coupon-system-phase-two`.coupons where (end_date < ?));", nativeQuery = true)
+    void deleteObsoletePurchases(Date today);
+    @Transactional
+    @Modifying
+    @Query(value = "delete from `coupon-system-phase-two`.coupons where (end_date < ?);", nativeQuery = true)
+    void deleteObsoleteCoupons(Date today);
     @Transactional
     @Modifying
     @Query(value = "DELETE from `coupon-system-phase-two`.`customers_coupons` WHERE `customer_id` = ?;", nativeQuery = true)

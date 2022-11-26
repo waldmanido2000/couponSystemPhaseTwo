@@ -3,6 +3,7 @@ package com.jb.couponSystemPhaseTwo.services;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.exceptions.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
@@ -13,6 +14,7 @@ public class LoginManager {
     @Autowired
     private CustomerService customerService;
     @Autowired
+    @Qualifier("adminServiceImpl")
     private AdminService adminService;
     public ClientService login(String email, String password, ClientType clientType) throws SQLException, CouponSystemException {
         ClientService clientService = null;

@@ -24,7 +24,6 @@ public class CustomerServiceImpl  extends ClientService implements CustomerServi
     @Override
     public void purchaseCoupon(int customerId, Coupon coupon) throws CouponSystemException {
         coupon = couponRepo.findById(coupon.getId()).orElseThrow(()->new CouponSystemException(ErrorMessage.COUPON_NOT_EXIST));
-        System.out.println(couponRepo.isPurchased(customerId, coupon.getId()));
         if(couponRepo.isPurchased(customerId, coupon.getId()) != 0){
             throw new CouponSystemException(ErrorMessage.COUPON_ALREADY_PURCHASED);
         }

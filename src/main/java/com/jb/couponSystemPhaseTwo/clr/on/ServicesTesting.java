@@ -5,6 +5,7 @@ import com.jb.couponSystemPhaseTwo.services.CompanyService;
 import com.jb.couponSystemPhaseTwo.services.CustomerService;
 import com.jb.couponSystemPhaseTwo.utils.Debug;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 public abstract class ServicesTesting {
     protected static final String FAIL = AnticipatedResult.FAIL.getMessage();
@@ -16,6 +17,7 @@ public abstract class ServicesTesting {
     @Autowired
     protected CompanyService companyService;
     @Autowired
+    @Qualifier("adminServiceImpl")
     protected AdminService adminService;
     @Autowired
     protected CustomerService customerService;
