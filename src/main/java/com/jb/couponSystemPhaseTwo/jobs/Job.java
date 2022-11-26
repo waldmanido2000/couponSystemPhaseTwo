@@ -12,8 +12,8 @@ import java.time.LocalDate;
 public class Job {
     @Autowired
     private CouponRepo couponRepo;
-    @Scheduled(cron = "*/5 * * * * *")
-//    @Scheduled(cron = "0 0 2 * * *")
+//    @Scheduled(cron = "*/5 * * * * *")
+    @Scheduled(cron = "0 0 2 * * *")
     public void deleteObsoleteCoupons(){
         Date today = Date.valueOf(LocalDate.now());
         System.out.println("running job");
