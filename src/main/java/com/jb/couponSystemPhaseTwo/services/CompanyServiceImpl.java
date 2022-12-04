@@ -70,6 +70,7 @@ public class CompanyServiceImpl extends ClientService implements CompanyService{
 
     @Override
     public Company getCompanyDetails(int companyId) throws SQLException, CouponSystemException {
-        return companyRepo.findById(companyId).orElseThrow(() -> new CouponSystemException(ErrorMessage.COMPANY_NOT_EXIST));
+        return companyRepo.findById(companyId)
+                .orElseThrow(() -> new CouponSystemException(ErrorMessage.COMPANY_NOT_EXIST));
     }
 }

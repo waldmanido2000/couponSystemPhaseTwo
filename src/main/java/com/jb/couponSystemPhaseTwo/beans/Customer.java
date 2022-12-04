@@ -30,7 +30,6 @@ public class Customer {
     @Column(length = 40, nullable = false)
     private String password;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    @JsonIgnore
     @ToString.Exclude
     @PrimaryKeyJoinColumns({@PrimaryKeyJoinColumn(name = "customer_id"), @PrimaryKeyJoinColumn(name = "coupons_id")})
     @JoinTable(name = "customers_coupons"
