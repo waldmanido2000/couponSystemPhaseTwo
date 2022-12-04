@@ -1,5 +1,6 @@
-package com.jb.couponSystemPhaseTwo.clr.on;
+package com.jb.couponSystemPhaseTwo.clr.on.serviceTesting;
 
+import com.jb.couponSystemPhaseTwo.clr.on.AnticipatedResult;
 import com.jb.couponSystemPhaseTwo.services.AdminService;
 import com.jb.couponSystemPhaseTwo.services.CompanyService;
 import com.jb.couponSystemPhaseTwo.services.CustomerService;
@@ -15,11 +16,13 @@ public abstract class ServicesTesting {
     protected static final String FLAG_NAME = "TEST_DEBUG_MODE";
 
     @Autowired
+    @Qualifier("companyServiceImpl")
     protected CompanyService companyService;
     @Autowired
     @Qualifier("adminServiceImpl")
     protected AdminService adminService;
     @Autowired
+    @Qualifier("customerServiceImpl")
     protected CustomerService customerService;
 
     protected void failDescription(String description) {

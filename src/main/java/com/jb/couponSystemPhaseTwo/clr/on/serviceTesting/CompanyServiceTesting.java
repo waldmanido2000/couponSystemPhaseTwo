@@ -1,4 +1,4 @@
-package com.jb.couponSystemPhaseTwo.clr.on;
+package com.jb.couponSystemPhaseTwo.clr.on.serviceTesting;
 
 
 import com.jb.couponSystemPhaseTwo.beans.Category;

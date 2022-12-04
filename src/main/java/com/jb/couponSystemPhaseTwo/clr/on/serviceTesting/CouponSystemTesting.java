@@ -1,8 +1,7 @@
-package com.jb.couponSystemPhaseTwo.clr.on;
+package com.jb.couponSystemPhaseTwo.clr.on.serviceTesting;
 
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.services.*;
-import com.jb.couponSystemPhaseTwo.utils.Debug;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
@@ -25,8 +24,10 @@ public class CouponSystemTesting extends ServicesTesting implements CommandLineR
     private static final String CUSTOMER_EMAIL = "www@customer4";
     private static final String CUSTOMER_PASSWORD = "pass4";
     @Autowired
+    @Qualifier("companyServiceImpl")
     private CompanyService companyService;
     @Autowired
+    @Qualifier("customerServiceImpl")
     private CustomerService customerService;
     @Autowired
     @Qualifier("adminServiceImpl")

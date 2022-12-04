@@ -1,4 +1,4 @@
-package com.jb.couponSystemPhaseTwo.clr.on;
+package com.jb.couponSystemPhaseTwo.clr.on.serviceTesting;
 
 import com.jb.couponSystemPhaseTwo.beans.Category;
 import com.jb.couponSystemPhaseTwo.beans.Coupon;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.List;
 
 @Component
 @Order(5)
