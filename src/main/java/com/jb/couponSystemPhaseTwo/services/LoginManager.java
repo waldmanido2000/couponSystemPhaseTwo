@@ -10,6 +10,7 @@ import java.sql.SQLException;
 @Component
 public class LoginManager {
     @Autowired
+    @Qualifier("companyServiceImpl")
     private CompanyService companyService;
     @Autowired
     private CustomerService customerService;

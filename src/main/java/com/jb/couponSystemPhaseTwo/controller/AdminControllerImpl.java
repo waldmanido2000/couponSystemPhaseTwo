@@ -6,6 +6,7 @@ import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -20,18 +21,23 @@ public class AdminControllerImpl implements AdminService {
 
     @Override
     @PostMapping("companies/add")
+    @ResponseStatus(HttpStatus.CREATED)
     public void addCompany(@RequestBody Company company) throws SQLException, CouponSystemException {
         adminService.addCompany(company);
     }
 
     @Override
-    public void updateCompany(int companyId, Company company) throws SQLException, CouponSystemException {
-
+    @PutMapping("companies/company/{companyId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateCompany(@PathVariable int companyId,@RequestBody Company company) throws SQLException, CouponSystemException {
+        adminService.updateCompany(companyId, company);
     }
 
     @Override
-    public void deleteCompany(int companyId) throws SQLException, CouponSystemException {
-
+    @DeleteMapping("companies/company/{companyId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCompany(@PathVariable int companyId) throws SQLException, CouponSystemException {
+        adminService.deleteCompany(companyId);
     }
 
     @Override
@@ -48,18 +54,23 @@ public class AdminControllerImpl implements AdminService {
 
     @Override
     @PostMapping("customers/add")
+    @ResponseStatus(HttpStatus.CREATED)
     public void addCustomer(@RequestBody Customer customer) throws SQLException, CouponSystemException {
         adminService.addCustomer(customer);
     }
 
     @Override
-    public void updateCustomer(int customerId, Customer customer) throws SQLException, CouponSystemException {
-
+    @PutMapping("customers/customer/{customerId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateCustomer(@PathVariable int customerId, @RequestBody Customer customer) throws SQLException, CouponSystemException {
+        adminService.updateCustomer(customerId, customer);
     }
 
     @Override
-    public void deleteCustomer(int customerId) throws SQLException, CouponSystemException {
-
+    @DeleteMapping("customers/customer/{customerId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCustomer(@PathVariable int customerId) throws SQLException, CouponSystemException {
+        adminService.deleteCustomer(customerId);
     }
 
     @Override

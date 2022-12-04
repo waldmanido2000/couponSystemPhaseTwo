@@ -12,9 +12,7 @@ import java.util.List;
 
 @Repository
 public interface CouponRepo extends JpaRepository <Coupon, Integer> {
-    @Query
     boolean existsByCompany_idAndTitle(int Company_id, String title);
-    @Query
     List<Coupon> findByCompany_id(int companyId);
     @Transactional
     @Modifying

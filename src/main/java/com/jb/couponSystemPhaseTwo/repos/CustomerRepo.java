@@ -28,6 +28,5 @@ public interface CustomerRepo extends JpaRepository<Customer, Integer> {
             "ADD PRIMARY KEY (`customer_id`, `coupons_id`);", nativeQuery = true)
     void alterTable();
 
-    @Query
     boolean existsByEmail(String email);
 }
