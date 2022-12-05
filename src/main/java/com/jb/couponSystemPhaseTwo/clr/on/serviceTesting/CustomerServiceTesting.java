@@ -41,9 +41,9 @@ public class CustomerServiceTesting extends ServicesTesting implements CommandLi
     }
 
     private void purchaseCoupon(int customerId, Coupon coupon) throws SQLException {
-        controlDescription("|--->\tcoupons");
-        failDescription("|--->\tcustomer purchaseCoupon (coupon already purchased)");
+        controlDescription("|--->\t customer coupons");
         customerService.getCustomerCoupons(customerId).forEach(System.out::println);
+        failDescription("|--->\tcustomer purchaseCoupon (coupon already purchased)");
         coupon.setId(6);
         try {
             customerService.purchaseCoupon(customerId,coupon);
@@ -51,7 +51,6 @@ public class CustomerServiceTesting extends ServicesTesting implements CommandLi
             System.out.println(e.getMessage());
         }
         failDescription("|--->\tcustomer purchaseCoupon (coupon amount 0)");
-        customerService.getCustomerCoupons(customerId).forEach(System.out::println);
         coupon.setId(11);
         try {
             customerService.purchaseCoupon(customerId,coupon);
@@ -59,7 +58,6 @@ public class CustomerServiceTesting extends ServicesTesting implements CommandLi
             System.out.println(e.getMessage());
         }
         failDescription("|--->\tcustomer purchaseCoupon (coupon is obsolete)");
-        customerService.getCustomerCoupons(customerId).forEach(System.out::println);
         coupon.setId(13);
         try {
             customerService.purchaseCoupon(customerId,coupon);
@@ -67,14 +65,13 @@ public class CustomerServiceTesting extends ServicesTesting implements CommandLi
             System.out.println(e.getMessage());
         }
         successDescription("|--->\tcustomer purchaseCoupon success");
-        customerService.getCustomerCoupons(customerId).forEach(System.out::println);
         coupon.setId(couponId);
         try {
             customerService.purchaseCoupon(customerId,coupon);
         } catch (CouponSystemException e) {
             System.out.println(e.getMessage());
         }
-        controlDescription("|--->\tcoupons");
+        controlDescription("|--->\t customer coupons");
         customerService.getCustomerCoupons(customerId).forEach(System.out::println);
     }
 
