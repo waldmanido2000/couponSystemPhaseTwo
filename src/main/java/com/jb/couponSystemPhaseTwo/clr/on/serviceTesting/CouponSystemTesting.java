@@ -2,6 +2,7 @@ package com.jb.couponSystemPhaseTwo.clr.on.serviceTesting;
 
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.services.*;
+import com.jb.couponSystemPhaseTwo.utils.MessageColor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
@@ -13,6 +14,14 @@ import java.sql.SQLException;
 @Component
 @Order(2)
 public class CouponSystemTesting extends ServicesTesting implements CommandLineRunner {
+    private String banner = MessageColor.ANSI_BG_PURPLE.getTextColor() + MessageColor.ANSI_BLACK.getTextColor() +
+            "\t\t\t\t  __                   __  .__                                           .__                     \n" +
+            "\t\t\t\t_/  |_  ____   _______/  |_|__| ____    ____     ______ ______________  _|__| ____  ____   ______\n" +
+            "\t\t\t\t\\   __\\/ __ \\ /  ___/\\   __\\  |/    \\  / ___\\   /  ___// __ \\_  ___\\  \\/ /  |/ ___\\/ __ \\ /  ___/\n" +
+            "\t\t\t\t |  | \\  ___/ \\___ \\  |  | |  |   |  \\/ /_/  >  \\___ \\\\  ___/|  |   \\   /|  \\  \\__\\  ___/ \\___ \\ \n" +
+            "\t\t\t\t |__|  \\___  >____  > |__| |__|___|  /\\___  /  /____  >\\___  >__|    \\_/ |__|\\___  >___  >____  >\n" +
+            "\t\t\t\t           \\/     \\/               \\//_____/        \\/     \\/                    \\/    \\/     \\/ \n\n"+
+            MessageColor.ANSI_BG_BLACK.getTextColor();
 
     /* login attributes */
     private static final String WRONG_EMAIL = "wrong@email.com";
@@ -38,6 +47,7 @@ public class CouponSystemTesting extends ServicesTesting implements CommandLineR
     @Override
     public void run(String... args) throws Exception {
         /* loginManager */
+        System.out.println(banner);
         controlDescription("\t\ttesting loginManager\n");
         adminLogin();
         companyLogin();

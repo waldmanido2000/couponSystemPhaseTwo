@@ -97,7 +97,7 @@ public class AdminServiceTesting extends ServicesTesting implements CommandLineR
     }
 
     private void deleteCompany(int companyId) throws SQLException {
-        successDescription("|--->\tadmin updateCompany success");
+        successDescription("|--->\tadmin deleteCompany success");
         try {
             adminService.deleteCompany(companyId);
         } catch (CouponSystemException e) {
