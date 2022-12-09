@@ -2,16 +2,16 @@ package com.jb.couponSystemPhaseTwo.clr.on.controllerTesting;
 
 import com.jb.couponSystemPhaseTwo.beans.Company;
 import com.jb.couponSystemPhaseTwo.beans.Customer;
-import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.utils.MessageColor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,82 +33,153 @@ private String banner = MessageColor.ANSI_BG_GREEN.getTextColor() + MessageColor
             .name("new controller company")
             .password("new pass")
             .build();
+    private final Company companyToUpdate = Company.builder()
+            .email("email@myaddress.com")
+            .name("new name")
+            .password("new pass")
+            .build();
     private final Customer customer = Customer.builder()
             .firstName("new")
             .lastName("customer")
             .email("email@address.com")
             .password("new pass")
             .build();
+    private final Customer customerToUpdate = Customer.builder()
+            .firstName("new")
+            .lastName("customer")
+            .email("email@address.com")
+            .password("updated pass")
+            .build();
     @Override
     public void run(String... args) throws Exception {
         System.out.println(banner);
         controlDescription("\t\ttesting adminController\n");
+        getAllCompanies();
         addCompany(company);
-//        updateCompany(10, company);
+        addCompany(company);
+        updateCompany(1000,companyToUpdate);
+        updateCompany(10,companyToUpdate);
+        updateCompany(11,companyToUpdate);
+        deleteCompany(7);
         deleteCompany(7);
         getOneCompany(8);
-//        addCustomer(customer);
-//        updateCustomer(10, customer);
-//        deleteCustomer(9);
-//        getOneCustomer(11);
+        getAllCustomers();
+        addCustomer(customer);
+        addCustomer(customer);
+        updateCustomer(1000, customerToUpdate);
+        updateCustomer(10, customerToUpdate);
+        deleteCustomer(7);
+        deleteCustomer(7);
+        getOneCustomer(8);
         controlDescription("\t\ttesting adminController ended\n");
     }
     // companies functions
-    private void addCompany(Company company) throws SQLException, CouponSystemException {
-        controlDescription("|--->\tcompanies");
-        getAllCompanies().forEach(System.out::println);
-        successDescription("|--->\tadmin addCompany success");
-        ResponseEntity<String> res = restTemplate.postForEntity(url + "/companies/add", company, String.class);
-        System.out.println((res.getStatusCodeValue() == 201) ? "SABABA" : "Something went wrong");
-        controlDescription("|--->\tcompanies");
-        getAllCompanies().forEach(System.out::println);
+    private void addCompany(Company company) {
+        HttpEntity<Company> add = new HttpEntity<>(company);
+        try {
+            ResponseEntity<Company> res = restTemplate.exchange(url + "/companies", HttpMethod.POST, add, Company.class);
+            successDescription("|--->\tadmin addCompany success. response status is: " + (res.getStatusCodeValue()));
+            getAllCompanies();
+        }
+        catch (Exception e) {
+            failDescription("|--->\tadmin addCompany fail");
+            System.out.println(e.getMessage());
+        }
     }
 
-    private void updateCompany(int companyId, Company company) throws SQLException, CouponSystemException{
-        successDescription("|--->\tadmin addCompany success");
-        System.out.println(restTemplate.postForEntity(url + "/companies/add", company, String.class).getStatusCode());
-        controlDescription("|--->\tcompanies");
-        getAllCompanies().forEach(System.out::println);
-        // TODO: 12/5/2022
+    private void updateCompany(int companyId, Company company) {
+        company.setId(companyId);
+        try {
+            HttpEntity<Company> update = new HttpEntity<>(company);
+            ResponseEntity<Company> res = restTemplate.exchange(url+"/companies/company/"+companyId, HttpMethod.PUT,update,Company.class);
+            successDescription("|--->\tadmin updateCompany success. response status is: " + (res.getStatusCodeValue()));
+            getAllCompanies();
+        }
+        catch (Exception e) {
+            failDescription("|--->\tadmin updateCompany fail");
+            System.out.println(e.getMessage());
+        }
     }
 
-    private void deleteCompany(int companyId) throws SQLException, CouponSystemException {
-        successDescription("|--->\tadmin deleteCompany success");
-        restTemplate.delete(url + "/companies/company/"+companyId);
-        controlDescription("|--->\tcompanies");
-        getAllCompanies().forEach(System.out::println);
+    private void deleteCompany(int companyId) {
+        try {
+            ResponseEntity<Company> res = restTemplate.exchange(url + "/companies/company/"+companyId, HttpMethod.DELETE, null, Company.class);
+            successDescription("|--->\tadmin deleteCompany success. response status is: " + (res.getStatusCodeValue()));
+            getAllCompanies();
+        } catch (Exception e) {
+            failDescription("|--->\tadmin deleteCompany fail");
+            System.out.println(e.getMessage());
+        }
     }
 
-    private List<Company> getAllCompanies() throws SQLException {
-        return new ArrayList<>(List.of(Objects.requireNonNull(restTemplate.getForObject(url + "/companies", Company[].class))));
+    private void getAllCompanies() {
+        ResponseEntity<List<Company>> res = restTemplate.exchange(url + "/companies", HttpMethod.GET, null, new ParameterizedTypeReference<List<Company>>() {});
+        controlDescription("|--->\tadmin getAllCompanies. response status is: " + (res.getStatusCodeValue()));
+        Objects.requireNonNull(res.getBody()).forEach(System.out::println);
     }
 
-    private Company getOneCompany(int companyId) throws SQLException, CouponSystemException {
-        successDescription("|--->\tadmin get one Company success");
-        Company company1 = (restTemplate.getForObject(url + "/companies/company/"+companyId, Company.class));
-        System.out.println(company1);
-        return company1;
+    private void getOneCompany(int companyId) {
+        try {
+            ResponseEntity<Company> res = restTemplate.exchange(url + "/companies/company/"+companyId, HttpMethod.GET, null, new ParameterizedTypeReference<Company>() {});
+            controlDescription("|--->\tadmin getOneCompany success. response status is: " + (res.getStatusCodeValue()));
+            System.out.println(res.getBody());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     // customers functions
-    private void addCustomer(Customer customer) throws SQLException, CouponSystemException{
-        // TODO: 12/5/2022
+    private void addCustomer(Customer customer) {
+        HttpEntity<Customer> add = new HttpEntity<>(customer);
+        try {
+            ResponseEntity<Customer> res = restTemplate.exchange(url + "/customers", HttpMethod.POST, add, Customer.class);
+            successDescription("|--->\tadmin addCustomer success. response status is: " + (res.getStatusCodeValue()));
+            getAllCustomers();
+        }
+        catch (Exception e) {
+            failDescription("|--->\tadmin addCustomer fail");
+            System.out.println(e.getMessage());
+        }
     }
 
-    private void updateCustomer(int customerId, Customer customer) throws SQLException, CouponSystemException{
-        // TODO: 12/5/2022
+    private void updateCustomer(int customerId, Customer customer) {
+        customer.setId(customerId);
+        try {
+            HttpEntity<Customer> update = new HttpEntity<>(customer);
+            ResponseEntity<Customer> res = restTemplate.exchange(url+"/customers/customer/"+customerId, HttpMethod.PUT,update,Customer.class);
+            successDescription("|--->\tadmin updateCustomer success. response status is: " + (res.getStatusCodeValue()));
+            getAllCustomers();
+        }
+        catch (Exception e) {
+            failDescription("|--->\tadmin updateCustomer fail");
+            System.out.println(e.getMessage());
+        }
     }
 
-    private void deleteCustomer(int customerId) throws SQLException, CouponSystemException{
-        // TODO: 12/5/2022
+    private void deleteCustomer(int customerId) {
+        try {
+            ResponseEntity<Customer> res = restTemplate.exchange(url + "/customers/customer/"+customerId, HttpMethod.DELETE, null, Customer.class);
+            successDescription("|--->\tadmin deleteCustomer success. response status is: " + (res.getStatusCodeValue()));
+            getAllCustomers();
+        } catch (Exception e) {
+            failDescription("|--->\tadmin deleteCustomer fail");
+            System.out.println(e.getMessage());
+        }
     }
 
-    private List<Customer> getAllCustomers() throws SQLException{
-        // TODO: 12/5/2022
-        return null;
+    private void getAllCustomers() {
+        ResponseEntity<List<Customer>> res = restTemplate.exchange(url + "/customers", HttpMethod.GET, null, new ParameterizedTypeReference<List<Customer>>() {});
+        controlDescription("|--->\tadmin getAllCustomers. response status is: " + (res.getStatusCodeValue()));
+        Objects.requireNonNull(res.getBody()).forEach(System.out::println);
     }
-    private Customer getOneCustomer(int customerId) throws SQLException, CouponSystemException{
-        // TODO: 12/5/2022
-        return null;
+
+    private void getOneCustomer(int customerId) {
+        try {
+            ResponseEntity<Customer> res = restTemplate.exchange(url + "/customers/customer/"+customerId, HttpMethod.GET, null, new ParameterizedTypeReference<Customer>() {});
+            controlDescription("|--->\tadmin getOneCustomer success. response status is: " + (res.getStatusCodeValue()));
+            System.out.println(res.getBody());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

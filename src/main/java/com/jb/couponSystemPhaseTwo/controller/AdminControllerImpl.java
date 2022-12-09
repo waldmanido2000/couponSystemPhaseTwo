@@ -20,7 +20,7 @@ public class AdminControllerImpl implements AdminService {
     private AdminService adminService;
 
     @Override
-    @PostMapping("companies/add")
+    @PostMapping("companies")
     @ResponseStatus(HttpStatus.CREATED)
     public void addCompany(@RequestBody Company company) throws SQLException, CouponSystemException {
         adminService.addCompany(company);
@@ -53,7 +53,7 @@ public class AdminControllerImpl implements AdminService {
     }
 
     @Override
-    @PostMapping("customers/add")
+    @PostMapping("customers")
     @ResponseStatus(HttpStatus.CREATED)
     public void addCustomer(@RequestBody Customer customer) throws SQLException, CouponSystemException {
         adminService.addCustomer(customer);
