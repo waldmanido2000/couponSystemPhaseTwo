@@ -20,7 +20,7 @@ public class CompanyControllerImpl implements CompanyController {
     @Qualifier("companyServiceImpl")
     private CompanyService companyService;
     @Override
-    @PostMapping("{companyId}/coupons/add")
+    @PostMapping("{companyId}/coupons")
     @ResponseStatus(HttpStatus.CREATED)
     public void addCoupon(@PathVariable int companyId, @RequestBody Coupon coupon) throws CouponSystemException, SQLException {
         companyService.addCoupon(companyId, coupon);
