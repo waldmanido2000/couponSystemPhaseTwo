@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/customer")
-public class CustomerControllerImpl implements CustomerController{
+public class CustomerControllerImpl implements CustomerController {
     @Autowired
     @Qualifier("customerServiceImpl")
     private CustomerService customerServiceImpl;
@@ -28,20 +28,20 @@ public class CustomerControllerImpl implements CustomerController{
     }
 
     @Override
-    @GetMapping("{customerId}/coupons/")
+    @GetMapping("{customerId}/coupons")
     public List<Coupon> getCustomerCoupons(@PathVariable int customerId) throws SQLException {
         return customerServiceImpl.getCustomerCoupons(customerId);
     }
 
     @Override
     @GetMapping("{customerId}/coupons/byCategory")
-    public List<Coupon> getCustomerCoupons(@PathVariable int customerId,@RequestParam Category category) throws SQLException {
+    public List<Coupon> getCustomerCoupons(@PathVariable int customerId, @RequestParam Category category) throws SQLException {
         return customerServiceImpl.getCustomerCoupons(customerId, category);
     }
 
     @Override
     @GetMapping("{customerId}/coupons/byMaxPrice")
-    public List<Coupon> getCustomerCoupons(@PathVariable int customerId,@RequestParam double maxPrice) throws SQLException {
+    public List<Coupon> getCustomerCoupons(@PathVariable int customerId, @RequestParam double maxPrice) throws SQLException {
         return customerServiceImpl.getCustomerCoupons(customerId, maxPrice);
     }
 

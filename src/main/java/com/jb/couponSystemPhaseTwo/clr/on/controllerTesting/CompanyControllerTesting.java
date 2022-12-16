@@ -1,6 +1,7 @@
 package com.jb.couponSystemPhaseTwo.clr.on.controllerTesting;
 
 import com.jb.couponSystemPhaseTwo.beans.Category;
+import com.jb.couponSystemPhaseTwo.beans.Company;
 import com.jb.couponSystemPhaseTwo.beans.Coupon;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -48,21 +49,21 @@ public class CompanyControllerTesting extends ControllerTesting implements Comma
         addCoupon(companyId, coupon);
         int couponId = 1;
         updateCoupon(companyId, 2, couponToUpdate);
-//        deleteCoupon(companyId, couponId);
-//        getCompanyCoupons(companyId);
-//        getCompanyCoupons(companyId, Category.ELECTRICITY);
-//        getCompanyCoupons(companyId, 170.5);
-//        getCompanyDetails(companyId);
+        deleteCoupon(companyId, couponId);
+        getCompanyCoupons(companyId, Category.ELECTRICITY);
+        getCompanyCoupons(companyId, 170.5);
+        getCompanyDetails(companyId);
+        controlDescription("\t\ttesting companyController ended\n");
     }
 
     private void addCoupon(int companyId, Coupon coupon) {
         HttpEntity<Coupon> add = new HttpEntity<>(coupon);
         try {
             ResponseEntity<Coupon> res = restTemplate.exchange(url + companyId + "/coupons", HttpMethod.POST, add, Coupon.class);
-            successDescription("|--->\tadmin addCoupon success. response status is: " + (res.getStatusCodeValue()));
+            successDescription("|--->\tcompany addCoupon success. response status is: " + (res.getStatusCodeValue()));
             getCompanyCoupons(companyId);
         } catch (Exception e) {
-            failDescription("|--->\tadmin addCoupon fail");
+            failDescription("|--->\tcompany addCoupon fail");
             System.out.println(e.getMessage());
         }
     }
@@ -72,34 +73,51 @@ public class CompanyControllerTesting extends ControllerTesting implements Comma
         try {
             HttpEntity<Coupon> update = new HttpEntity<>(coupon);
             ResponseEntity<Coupon> res = restTemplate.exchange(url + companyId + "/coupon/" + couponId, HttpMethod.PUT, update, Coupon.class);
-            successDescription("|--->\tadmin updateCoupon success. response status is: " + (res.getStatusCodeValue()));
+            successDescription("|--->\tcompany updateCoupon success. response status is: " + (res.getStatusCodeValue()));
             getCompanyCoupons(companyId);
         } catch (Exception e) {
-            failDescription("|--->\tadmin updateCompany fail");
+            failDescription("|--->\tcompany updateCompany fail");
             System.out.println(e.getMessage());
         }
     }
 
     private void deleteCoupon(int companyId, int couponId) {
+        try {
+            ResponseEntity<Coupon> res = restTemplate.exchange(url + companyId + "/coupon/" + couponId, HttpMethod.DELETE, null, Coupon.class);
+            successDescription("|--->\tcompany deleteCoupon success. response status is: " + (res.getStatusCodeValue()));
+            getCompanyCoupons(companyId);
+        } catch (Exception e) {
+            failDescription("|--->\tcompany deleteCoupon fail");
+            System.out.println(e.getMessage());
+        }
 
     }
 
     private void getCompanyCoupons(int companyId) {
         ResponseEntity<List<Coupon>> res = restTemplate.exchange(url + companyId + "/coupons", HttpMethod.GET, null, new ParameterizedTypeReference<List<Coupon>>() {
         });
-        controlDescription("|--->\tadmin getCompanyCoupons. response status is: " + (res.getStatusCodeValue()));
+        controlDescription("|--->\tcompany getCompanyCoupons. response status is: " + (res.getStatusCodeValue()));
         Objects.requireNonNull(res.getBody()).forEach(System.out::println);
     }
 
     private void getCompanyCoupons(int companyId, Category category) {
-
+        ResponseEntity<List<Coupon>> res = restTemplate.exchange(url + companyId + "/coupons/byCategory?category=" + category, HttpMethod.GET, null, new ParameterizedTypeReference<List<Coupon>>() {
+        });
+        controlDescription("|--->\tcompany getCompanyCoupons by category. response status is: " + (res.getStatusCodeValue()));
+        Objects.requireNonNull(res.getBody()).forEach(System.out::println);
     }
 
     private void getCompanyCoupons(int companyId, double maxPrice) {
-
+        ResponseEntity<List<Coupon>> res = restTemplate.exchange(url + companyId + "/coupons/byMaxPrice?maxPrice=" + maxPrice, HttpMethod.GET, null, new ParameterizedTypeReference<List<Coupon>>() {
+        });
+        controlDescription("|--->\tcompany getCompanyCoupons by maxPrice. response status is: " + (res.getStatusCodeValue()));
+        Objects.requireNonNull(res.getBody()).forEach(System.out::println);
     }
 
     private void getCompanyDetails(int companyId) {
-
+        ResponseEntity<Company> res = restTemplate.exchange(url + companyId + "/details", HttpMethod.GET, null, new ParameterizedTypeReference<Company>() {
+        });
+        controlDescription("|--->\tcompany getCompanyCoupons by maxPrice. response status is: " + (res.getStatusCodeValue()));
+        System.out.println(res.getBody());
     }
 }
