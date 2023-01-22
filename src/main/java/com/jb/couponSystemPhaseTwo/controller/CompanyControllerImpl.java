@@ -20,6 +20,7 @@ public class CompanyControllerImpl implements CompanyController {
     @Autowired
     @Qualifier("companyServiceImpl")
     private CompanyService companyService;
+
     @Override
     @PostMapping("{companyId}/coupons")
     @ResponseStatus(HttpStatus.CREATED)
@@ -30,7 +31,7 @@ public class CompanyControllerImpl implements CompanyController {
     @Override
     @PutMapping("{companyId}/coupon/{couponId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateCoupon(@PathVariable int companyId,@PathVariable int couponId,@RequestBody Coupon coupon) throws CouponSystemException, SQLException {
+    public void updateCoupon(@PathVariable int companyId, @PathVariable int couponId, @RequestBody Coupon coupon) throws CouponSystemException, SQLException {
         companyService.updateCoupon(companyId, couponId, coupon);
     }
 
@@ -38,7 +39,7 @@ public class CompanyControllerImpl implements CompanyController {
     @DeleteMapping("{companyId}/coupon/{couponId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCoupon(@PathVariable int companyId, @PathVariable int couponId) throws CouponSystemException, SQLException {
-        companyService.deleteCoupon(companyId,couponId);
+        companyService.deleteCoupon(companyId, couponId);
     }
 
     @Override
@@ -50,12 +51,12 @@ public class CompanyControllerImpl implements CompanyController {
     @Override
     @GetMapping("{companyId}/coupons/byCategory")
     public List<Coupon> getCompanyCoupons(@PathVariable int companyId, @RequestParam Category category) throws SQLException {
-        return companyService.getCompanyCoupons(companyId,category);
+        return companyService.getCompanyCoupons(companyId, category);
     }
 
     @GetMapping("{companyId}/coupons/byMaxPrice")
     public List<Coupon> getCompanyCoupons(@PathVariable int companyId, @RequestParam double maxPrice) throws SQLException {
-        return companyService.getCompanyCoupons(companyId,maxPrice);
+        return companyService.getCompanyCoupons(companyId, maxPrice);
     }
 
     @Override
