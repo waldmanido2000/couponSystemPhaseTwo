@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/company")
+@CrossOrigin(origins = "*")
 public class CompanyControllerImpl implements CompanyController {
     @Autowired
     @Qualifier("companyServiceImpl")
