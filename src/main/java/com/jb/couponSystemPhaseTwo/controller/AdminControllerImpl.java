@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api")
+@CrossOrigin(origins = "*")
 public class AdminControllerImpl implements AdminService {
     @Autowired
     @Qualifier("adminServiceImpl")
@@ -29,7 +30,7 @@ public class AdminControllerImpl implements AdminService {
     @Override
     @PutMapping("companies/company/{companyId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateCompany(@PathVariable int companyId,@RequestBody Company company) throws SQLException, CouponSystemException {
+    public void updateCompany(@PathVariable int companyId, @RequestBody Company company) throws SQLException, CouponSystemException {
         adminService.updateCompany(companyId, company);
     }
 

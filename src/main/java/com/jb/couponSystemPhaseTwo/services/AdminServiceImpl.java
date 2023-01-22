@@ -5,14 +5,14 @@ import com.jb.couponSystemPhaseTwo.beans.Coupon;
 import com.jb.couponSystemPhaseTwo.beans.Customer;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.exceptions.ErrorMessage;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 @Service
-public class AdminServiceImpl  extends ClientService implements AdminService{
+public class AdminServiceImpl extends ClientService implements AdminService {
     @Override
     public void addCompany(Company company) throws CouponSystemException {
         if (companyRepo.existsByEmail(company.getEmail())) {
@@ -28,9 +28,13 @@ public class AdminServiceImpl  extends ClientService implements AdminService{
     public void updateCompany(int companyId, Company company) throws SQLException, CouponSystemException {
         company.setId(companyId);
         Company companyFromDB = companyRepo.findById(companyId)
-                .orElseThrow(()->new CouponSystemException(ErrorMessage.COMPANY_NOT_EXIST));
+                .orElseThrow(() -> new CouponSystemException(ErrorMessage.COMPANY_NOT_EXIST));
         if (!Objects.equals(company.getName(), companyFromDB.getName())) {
             throw new CouponSystemException(ErrorMessage.CANT_CHANGE_COMPANY_NAME);
+        }
+        for (Coupon coupon : company.getCoupons()
+        ) {
+            coupon.setCompany(company);
         }
         companyRepo.saveAndFlush(company);
     }
@@ -38,7 +42,7 @@ public class AdminServiceImpl  extends ClientService implements AdminService{
     @Override
     public void deleteCompany(int companyId) throws SQLException, CouponSystemException {
         if (!companyRepo.existsById(companyId)) {
-           throw  new CouponSystemException(ErrorMessage.COMPANY_NOT_EXIST);
+            throw new CouponSystemException(ErrorMessage.COMPANY_NOT_EXIST);
         }
         couponRepo.deletePurchasesByCompany(companyId);
         companyRepo.deleteById(companyId);
@@ -64,7 +68,7 @@ public class AdminServiceImpl  extends ClientService implements AdminService{
 
     @Override
     public void updateCustomer(int customerId, Customer customer) throws CouponSystemException {
-        if(!customerRepo.existsById(customerId)){
+        if (!customerRepo.existsById(customerId)) {
             throw new CouponSystemException(ErrorMessage.CUSTOMER_NOT_EXIST);
         }
         customer.setId(customerId);
@@ -74,7 +78,7 @@ public class AdminServiceImpl  extends ClientService implements AdminService{
     @Override
     public void deleteCustomer(int customerId) throws CouponSystemException {
         if (!customerRepo.existsById(customerId)) {
-            throw  new CouponSystemException(ErrorMessage.CUSTOMER_NOT_EXIST);
+            throw new CouponSystemException(ErrorMessage.CUSTOMER_NOT_EXIST);
         }
         couponRepo.deletePurchasesByCustomer(customerId);
         customerRepo.deleteById(customerId);
