@@ -6,15 +6,14 @@ import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public interface AdminService {
     // companies functions
-    void addCompany(Company company) throws SQLException, CouponSystemException;
+    Company addCompany(Company company) throws SQLException, CouponSystemException;
 
-    void updateCompany(int companyId, Company company) throws SQLException, CouponSystemException;
+    Company updateCompany(int companyId, Company company) throws SQLException, CouponSystemException;
 
     void deleteCompany(int companyId) throws SQLException, CouponSystemException;
 

@@ -23,19 +23,21 @@ public class AdminControllerImpl implements AdminService {
     @Override
     @PostMapping("companies")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addCompany(@RequestBody Company company) throws SQLException, CouponSystemException {
+    public Company addCompany(@RequestBody Company company) throws SQLException, CouponSystemException {
         adminService.addCompany(company);
+        return company;
     }
 
     @Override
-    @PutMapping("companies/company/{companyId}")
+    @PutMapping("companies/{companyId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateCompany(@PathVariable int companyId, @RequestBody Company company) throws SQLException, CouponSystemException {
+    public Company updateCompany(@PathVariable int companyId, @RequestBody Company company) throws SQLException, CouponSystemException {
         adminService.updateCompany(companyId, company);
+        return company;
     }
 
     @Override
-    @DeleteMapping("companies/company/{companyId}")
+    @DeleteMapping("companies/{companyId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCompany(@PathVariable int companyId) throws SQLException, CouponSystemException {
         adminService.deleteCompany(companyId);
@@ -48,7 +50,7 @@ public class AdminControllerImpl implements AdminService {
     }
 
     @Override
-    @GetMapping("companies/company/{id}")
+    @GetMapping("companies/{id}")
     public Company getOneCompany(@PathVariable("id") int companyId) throws SQLException, CouponSystemException {
         return adminService.getOneCompany(companyId);
     }
@@ -61,14 +63,14 @@ public class AdminControllerImpl implements AdminService {
     }
 
     @Override
-    @PutMapping("customers/customer/{customerId}")
+    @PutMapping("customers/{customerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateCustomer(@PathVariable int customerId, @RequestBody Customer customer) throws SQLException, CouponSystemException {
         adminService.updateCustomer(customerId, customer);
     }
 
     @Override
-    @DeleteMapping("customers/customer/{customerId}")
+    @DeleteMapping("customers/{customerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCustomer(@PathVariable int customerId) throws SQLException, CouponSystemException {
         adminService.deleteCustomer(customerId);
@@ -81,7 +83,7 @@ public class AdminControllerImpl implements AdminService {
     }
 
     @Override
-    @GetMapping("customers/customer/{id}")
+    @GetMapping("customers/{id}")
     public Customer getOneCustomer(@PathVariable("id") int customerId) throws SQLException, CouponSystemException {
         return adminService.getOneCustomer(customerId);
     }

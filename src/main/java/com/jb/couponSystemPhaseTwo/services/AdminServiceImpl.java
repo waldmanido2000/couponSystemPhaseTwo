@@ -14,7 +14,7 @@ import java.util.Objects;
 @Service
 public class AdminServiceImpl extends ClientService implements AdminService {
     @Override
-    public void addCompany(Company company) throws CouponSystemException {
+    public Company addCompany(Company company) throws CouponSystemException {
         if (companyRepo.existsByEmail(company.getEmail())) {
             throw new CouponSystemException(ErrorMessage.COMPANY_EXISTS_BY_EMAIL);
         }
@@ -22,10 +22,11 @@ public class AdminServiceImpl extends ClientService implements AdminService {
             throw new CouponSystemException(ErrorMessage.COMPANY_EXISTS_BY_NAME);
         }
         companyRepo.save(company);
+        return company;
     }
 
     @Override
-    public void updateCompany(int companyId, Company company) throws SQLException, CouponSystemException {
+    public Company updateCompany(int companyId, Company company) throws SQLException, CouponSystemException {
         company.setId(companyId);
         Company companyFromDB = companyRepo.findById(companyId)
                 .orElseThrow(() -> new CouponSystemException(ErrorMessage.COMPANY_NOT_EXIST));
@@ -37,6 +38,7 @@ public class AdminServiceImpl extends ClientService implements AdminService {
             coupon.setCompany(company);
         }
         companyRepo.saveAndFlush(company);
+        return company;
     }
 
     @Override
