@@ -28,7 +28,11 @@ public class CustomerControllerImpl implements CustomerController {
         customerServiceImpl.purchaseCoupon(customerId, coupon);
     }
 
-    @Override
+    @GetMapping("/coupons/available")
+    public List<Coupon> getAvailableCoupons() throws SQLException {
+        return customerServiceImpl.getAvailableCoupons();
+    }
+
     @GetMapping("{customerId}/coupons")
     public List<Coupon> getCustomerCoupons(@PathVariable int customerId) throws SQLException {
         return customerServiceImpl.getCustomerCoupons(customerId);

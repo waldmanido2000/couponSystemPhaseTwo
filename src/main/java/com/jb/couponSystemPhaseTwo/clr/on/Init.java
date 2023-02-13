@@ -4,8 +4,6 @@ import com.jb.couponSystemPhaseTwo.beans.Category;
 import com.jb.couponSystemPhaseTwo.beans.Company;
 import com.jb.couponSystemPhaseTwo.beans.Coupon;
 import com.jb.couponSystemPhaseTwo.beans.Customer;
-import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
-import com.jb.couponSystemPhaseTwo.exceptions.ErrorMessage;
 import com.jb.couponSystemPhaseTwo.repos.CompanyRepo;
 import com.jb.couponSystemPhaseTwo.repos.CouponRepo;
 import com.jb.couponSystemPhaseTwo.repos.CustomerRepo;
@@ -16,9 +14,11 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 @Component
 @Order(1)
@@ -36,9 +36,9 @@ public class Init implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
 
-            showDescription("\n***************** demoEntities start ******************\n");
-            demoEntities();
-            showDescription("\n***************** demoEntities end ******************\n");
+        showDescription("\n***************** demoEntities start ******************\n");
+        demoEntities();
+        showDescription("\n***************** demoEntities end ******************\n");
     }
 
 
@@ -49,19 +49,21 @@ public class Init implements CommandLineRunner {
         addCoupons();
         addCustomers();
         addCouponPurchase();
-        customerRepo.addPurchase(10,80);
+        customerRepo.addPurchase(10, 80);
     }
 
     private void addCompanies() {
         showDescription("\n|--->\tadding companies to DB\n");
         List<Company> companies = new ArrayList<>();
-        for (int i = 1; i < 11; i++) {
-            Company company = Company.builder()
-                    .email("www@company" + i)
-                    .password("pass" + i)
-                    .name("name " + i)
-                    .build();
-            companies.add(company);
+        List<String> emails = Arrays.asList("acme@gmail.com", "contoso@gmail.com", "adatum@gmail.com", "northwind@gmail.com", "proseware@gmail.com");
+        List<String> passwords = Arrays.asList("acme123", "contoso123", "adatum123", "northwind123", "proseware123");
+        List<String> names = Arrays.asList("Acme Inc.", "Contoso Ltd.", "Adatum Corp.", "Northwind Traders", "Proseware Inc.");
+        for (int i = 0; i < 10; i++) {
+            companies.add(Company.builder()
+                    .email(emails.get(i % 5))
+                    .password(passwords.get(i % 5))
+                    .name(names.get(i % 5))
+                    .build());
         }
         companyRepo.saveAll(companies);
     }
@@ -69,8 +71,8 @@ public class Init implements CommandLineRunner {
     private void addCoupons() {
         showDescription("\n|--->\tadding coupons to DB\n");
         List<Coupon> coupons = new ArrayList<>();
-        for (Company company:
-             companyRepo.findAll()) {
+        for (Company company :
+                companyRepo.findAll()) {
             for (int i = 1; i < 11; i++) {
                 LocalDate randomLocalDate = LocalDate.now();
                 Date startDate = Date.valueOf(randomLocalDate);
@@ -81,10 +83,10 @@ public class Init implements CommandLineRunner {
                         .amount(random.nextInt(200) + 100)
                         .category(Category.values()[(i) % 6])
                         .company(company)
-                        .image( "url" + i)
+                        .image(company.getName().toLowerCase().replaceAll("\\s+", "") + i + ".jpg")
                         .price(random.nextInt(300) + 1)
-                        .title("title " + i)
-                        .description("description " + i)
+                        .title(company.getName().toLowerCase().replaceAll("\\s+", "") + " coupon " + i)
+                        .description(company.getName().toLowerCase().replaceAll("\\s+", "") + " discount for " + i + "%")
                         .build();
                 coupons.add(couponTemp);
             }
@@ -98,10 +100,10 @@ public class Init implements CommandLineRunner {
                         .amount(0)
                         .category(Category.values()[(i) % 6])
                         .company(company)
-                        .image( "url" + i)
+                        .image(company.getName().toLowerCase().replaceAll("\\s+", "") + i + ".jpg")
                         .price(random.nextInt(300) + 1)
-                        .title("title " + i)
-                        .description("description " + i)
+                        .title(company.getName().toLowerCase().replaceAll("\\s+", "") + " coupon " + i)
+                        .description(company.getName().toLowerCase().replaceAll("\\s+", "") + " discount for " + i + "%")
                         .build();
                 coupons.add(couponTemp);
             }
@@ -109,41 +111,50 @@ public class Init implements CommandLineRunner {
                 LocalDate randomLocalDate = LocalDate.now();
                 Date startDate = Date.valueOf(randomLocalDate.minusDays(10));
                 Date endDate = Date.valueOf(randomLocalDate.minusDays(1));
-                Coupon couponTemp = Coupon.builder()
+                String[] randomTitles = {"Expired Coupon", "Old Offer", "Past Deal"};
+                String[] randomDescriptions = {"This coupon has already expired", "This offer is no longer valid", "This deal has passed its expiration date"};
+                Coupon coupon = Coupon.builder()
                         .startDate(startDate)
                         .endDate(endDate)
                         .amount(random.nextInt(200) + 100)
                         .category(Category.values()[(i) % 6])
                         .company(company)
-                        .image( "url" + i)
+                        .image("https://example.com/images/expired_coupon_" + i)
                         .price(random.nextInt(300) + 1)
-                        .title("title " + i)
-                        .description("description " + i)
+                        .title(randomTitles[i - 1])
+                        .description(randomDescriptions[i - 1])
                         .build();
-                coupons.add(couponTemp);
+                coupons.add(coupon);
             }
             couponRepo.saveAll(coupons);
         }
     }
+
     private void addCustomers() {
         showDescription("\n|--->\tadding customers to DB\n");
+        List<String> firstNames = Arrays.asList("John", "Jane", "Bob", "Alice", "Charlie", "Emily", "Ethan", "Ava", "Olivia", "William");
+        List<String> lastNames = Arrays.asList("Doe", "Smith", "Johnson", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor", "Anderson");
+        List<String> passwords = Arrays.asList("john123", "jane123", "bob123", "alice123", "charlie123", "emily123", "ethan123", "ava123", "olivia123", "william123");
+        List<String> emails = Arrays.asList("johndoe@gmail.com", "janesmith@gmail.com", "bobjohnson@gmail.com", "alicebrown@gmail.com", "charliedavis@gmail.com",
+                "emilymiller@gmail.com", "ethanwilson@gmail.com", "avamoore@gmail.com", "oliviataylor@gmail.com", "williamanderson@gmail.com");
+
         List<Customer> customers = new ArrayList<>();
-        for (int i = 1; i < 11; i++) {
-            Customer customer = Customer.builder()
-                    .firstName("first " + i)
-                    .lastName("last " + i)
-                    .password("pass" + i)
-                    .email("www@customer" + i)
-                    .build();
-            customers.add(customer);
+        for (int i = 0; i < 10; i++) {
+            customers.add(Customer.builder()
+                    .firstName(firstNames.get(i))
+                    .lastName(lastNames.get(i))
+                    .password(passwords.get(i))
+                    .email(emails.get(i))
+                    .build());
         }
         customerRepo.saveAll(customers);
     }
-    private void addCouponPurchase(){
+
+    private void addCouponPurchase() {
         showDescription("|--->\tadding purchases to DB");
         for (int i = 1; i <= customerRepo.count(); i++) {
             for (int j = 0; j < 5; j++) {
-                customerRepo.addPurchase(i,i*10-j);
+                customerRepo.addPurchase(i, i * 10 - j);
             }
         }
     }

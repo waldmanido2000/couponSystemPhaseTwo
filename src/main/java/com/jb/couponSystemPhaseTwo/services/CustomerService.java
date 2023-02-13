@@ -12,9 +12,16 @@ import java.util.List;
 @Service
 public interface CustomerService {
     boolean login(String email, String password) throws SQLException, CouponSystemException;
+
     void purchaseCoupon(int customerId, Coupon coupon) throws SQLException, CouponSystemException;
+
+    List<Coupon> getAvailableCoupons();
+
     List<Coupon> getCustomerCoupons(int customerId) throws SQLException;
+
     List<Coupon> getCustomerCoupons(int customerId, Category category) throws SQLException;
+
     List<Coupon> getCustomerCoupons(int customerId, double maxPrice) throws SQLException;
+
     Customer getCustomerDetails(int customerId) throws SQLException, CouponSystemException;
 }
