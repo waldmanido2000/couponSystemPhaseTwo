@@ -90,42 +90,42 @@ public class Init implements CommandLineRunner {
                         .build();
                 coupons.add(couponTemp);
             }
-            for (int i = 1; i < 3; i++) {
-                LocalDate randomLocalDate = LocalDate.now();
-                Date startDate = Date.valueOf(randomLocalDate);
-                Date endDate = Date.valueOf(randomLocalDate.plusDays(random.nextInt(28)));
-                Coupon couponTemp = Coupon.builder()
-                        .startDate(startDate)
-                        .endDate(endDate)
-                        .amount(0)
-                        .category(Category.values()[(i) % 6])
-                        .company(company)
-                        .image(company.getName().toLowerCase().replaceAll("\\s+", "") + i + ".jpg")
-                        .price(random.nextInt(300) + 1)
-                        .title(company.getName().toLowerCase().replaceAll("\\s+", "") + " coupon " + i)
-                        .description(company.getName().toLowerCase().replaceAll("\\s+", "") + " discount for " + i + "%")
-                        .build();
-                coupons.add(couponTemp);
-            }
-            for (int i = 1; i < 3; i++) {
-                LocalDate randomLocalDate = LocalDate.now();
-                Date startDate = Date.valueOf(randomLocalDate.minusDays(10));
-                Date endDate = Date.valueOf(randomLocalDate.minusDays(1));
-                String[] randomTitles = {"Expired Coupon", "Old Offer", "Past Deal"};
-                String[] randomDescriptions = {"This coupon has already expired", "This offer is no longer valid", "This deal has passed its expiration date"};
-                Coupon coupon = Coupon.builder()
-                        .startDate(startDate)
-                        .endDate(endDate)
-                        .amount(random.nextInt(200) + 100)
-                        .category(Category.values()[(i) % 6])
-                        .company(company)
-                        .image("https://example.com/images/expired_coupon_" + i)
-                        .price(random.nextInt(300) + 1)
-                        .title(randomTitles[i - 1])
-                        .description(randomDescriptions[i - 1])
-                        .build();
-                coupons.add(coupon);
-            }
+//            for (int i = 1; i < 3; i++) {
+//                LocalDate randomLocalDate = LocalDate.now();
+//                Date startDate = Date.valueOf(randomLocalDate);
+//                Date endDate = Date.valueOf(randomLocalDate.plusDays(random.nextInt(28)));
+//                Coupon couponTemp = Coupon.builder()
+//                        .startDate(startDate)
+//                        .endDate(endDate)
+//                        .amount(0)
+//                        .category(Category.values()[(i) % 6])
+//                        .company(company)
+//                        .image(company.getName().toLowerCase().replaceAll("\\s+", "") + i + ".jpg")
+//                        .price(random.nextInt(300) + 1)
+//                        .title(company.getName().toLowerCase().replaceAll("\\s+", "") + " coupon " + i)
+//                        .description(company.getName().toLowerCase().replaceAll("\\s+", "") + " discount for " + i + "%")
+//                        .build();
+//                coupons.add(couponTemp);
+//            }
+//            for (int i = 1; i < 3; i++) {
+//                LocalDate randomLocalDate = LocalDate.now();
+//                Date startDate = Date.valueOf(randomLocalDate.minusDays(10));
+//                Date endDate = Date.valueOf(randomLocalDate.minusDays(1));
+//                String[] randomTitles = {"Expired Coupon", "Old Offer", "Past Deal"};
+//                String[] randomDescriptions = {"This coupon has already expired", "This offer is no longer valid", "This deal has passed its expiration date"};
+//                Coupon coupon = Coupon.builder()
+//                        .startDate(startDate)
+//                        .endDate(endDate)
+//                        .amount(random.nextInt(200) + 100)
+//                        .category(Category.values()[(i) % 6])
+//                        .company(company)
+//                        .image("https://example.com/images/expired_coupon_" + i)
+//                        .price(random.nextInt(300) + 1)
+//                        .title(randomTitles[i - 1])
+//                        .description(randomDescriptions[i - 1])
+//                        .build();
+//                coupons.add(coupon);
+//            }
             couponRepo.saveAll(coupons);
         }
     }
