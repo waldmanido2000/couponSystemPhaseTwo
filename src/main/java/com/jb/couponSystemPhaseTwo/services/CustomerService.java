@@ -3,6 +3,7 @@ package com.jb.couponSystemPhaseTwo.services;
 import com.jb.couponSystemPhaseTwo.beans.Category;
 import com.jb.couponSystemPhaseTwo.beans.Coupon;
 import com.jb.couponSystemPhaseTwo.beans.Customer;
+import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Service
 public interface CustomerService {
-    boolean login(String email, String password) throws SQLException, CouponSystemException;
+    boolean login(String email, String password) throws SQLException, CouponSystemException, CouponSecurityException;
 
     void purchaseCoupon(int customerId, Coupon coupon) throws SQLException, CouponSystemException;
 

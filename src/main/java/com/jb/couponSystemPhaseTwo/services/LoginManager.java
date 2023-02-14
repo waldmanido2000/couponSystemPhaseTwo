@@ -1,7 +1,9 @@
 package com.jb.couponSystemPhaseTwo.services;
 
+import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.exceptions.ErrorMessage;
+import com.jb.couponSystemPhaseTwo.exceptions.SecurityMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -17,7 +19,7 @@ public class LoginManager {
     @Autowired
     @Qualifier("adminServiceImpl")
     private AdminService adminService;
-    public ClientService login(String email, String password, ClientType clientType) throws SQLException, CouponSystemException {
+    public ClientService login(String email, String password, ClientType clientType) throws SQLException, CouponSecurityException {
         ClientService clientService = null;
         boolean success;
         switch (clientType.ordinal()) {
@@ -38,6 +40,6 @@ public class LoginManager {
             return clientService;
         }
 
-        throw new CouponSystemException(ErrorMessage.LOGIN_FAIL);
+        throw new CouponSecurityException(SecurityMessage.LOGIN_FAIL);
     }
 }

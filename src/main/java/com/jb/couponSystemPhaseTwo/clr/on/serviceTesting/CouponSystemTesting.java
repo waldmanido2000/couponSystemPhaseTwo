@@ -1,5 +1,6 @@
 package com.jb.couponSystemPhaseTwo.clr.on.serviceTesting;
 
+import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.services.*;
 import com.jb.couponSystemPhaseTwo.utils.MessageColor;
@@ -60,7 +61,7 @@ public class CouponSystemTesting extends ServicesTesting implements CommandLineR
         failDescription("|--->\tadmin login testing wrong details");
         clientService = testLogin(WRONG_EMAIL, WRONG_PASSWORD, ClientType.ADMINISTRATOR);
         failDescription("|--->\tadmin login testing wrong Client type");
-        clientService = testLogin(ADMIN_EMAIL, ADMIN_PASSWORD, ClientType.CUSTOMER);
+        clientService = testLogin(ADMIN_EMAIL, ADMIN_PASSWORD, ClientType.COMPANY);
         successDescription("|--->\tadmin login testing success");
         clientService = testLogin(ADMIN_EMAIL, ADMIN_PASSWORD, ClientType.ADMINISTRATOR);
     }
@@ -85,7 +86,7 @@ public class CouponSystemTesting extends ServicesTesting implements CommandLineR
     private ClientService testLogin(String email, String password, ClientType clientType) throws SQLException {
         try {
             return loginManager.login(email, password, clientType);
-        } catch (CouponSystemException e) {
+        } catch (CouponSecurityException e) {
             System.out.println(e.getMessage());
         }
         return null;

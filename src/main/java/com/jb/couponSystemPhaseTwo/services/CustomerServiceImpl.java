@@ -3,8 +3,10 @@ package com.jb.couponSystemPhaseTwo.services;
 import com.jb.couponSystemPhaseTwo.beans.Category;
 import com.jb.couponSystemPhaseTwo.beans.Coupon;
 import com.jb.couponSystemPhaseTwo.beans.Customer;
+import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.exceptions.ErrorMessage;
+import com.jb.couponSystemPhaseTwo.exceptions.SecurityMessage;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -14,11 +16,11 @@ import java.util.List;
 @Service
 public class CustomerServiceImpl extends ClientService implements CustomerService {
     @Override
-    public boolean login(String email, String password) throws CouponSystemException {
+    public boolean login(String email, String password) throws CouponSecurityException {
         if (customerRepo.existsByEmailAndPassword(email, password)) {
             return true;
         }
-        throw new CouponSystemException(ErrorMessage.LOGIN_FAIL);
+        throw new CouponSecurityException(SecurityMessage.LOGIN_FAIL);
     }
 
     @Override

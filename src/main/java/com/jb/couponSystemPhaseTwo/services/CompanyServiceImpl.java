@@ -3,8 +3,10 @@ package com.jb.couponSystemPhaseTwo.services;
 import com.jb.couponSystemPhaseTwo.beans.Category;
 import com.jb.couponSystemPhaseTwo.beans.Company;
 import com.jb.couponSystemPhaseTwo.beans.Coupon;
+import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.exceptions.ErrorMessage;
+import com.jb.couponSystemPhaseTwo.exceptions.SecurityMessage;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -12,15 +14,15 @@ import java.util.List;
 @Service
 public class CompanyServiceImpl extends ClientService implements CompanyService{
     @Override
-    public boolean login(String email, String password) throws SQLException, CouponSystemException {
+    public boolean login(String email, String password) throws CouponSecurityException {
         if(companyRepo.existsByEmailAndPassword(email,password)){
             return true;
         }
-        throw new CouponSystemException(ErrorMessage.LOGIN_FAIL);
+        throw new CouponSecurityException(SecurityMessage.LOGIN_FAIL);
     }
 
     @Override
-    public void addCoupon(int companyId, Coupon coupon) throws SQLException, CouponSystemException {
+    public void addCoupon(int companyId, Coupon coupon) throws CouponSystemException {
         Company company = companyRepo.findById(companyId)
                 .orElseThrow(()->new CouponSystemException(ErrorMessage.COMPANY_NOT_EXIST));
         if (couponRepo.existsByCompany_idAndTitle(companyId,coupon.getTitle())) {

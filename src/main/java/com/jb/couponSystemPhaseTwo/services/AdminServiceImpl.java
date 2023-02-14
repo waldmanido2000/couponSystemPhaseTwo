@@ -98,7 +98,7 @@ public class AdminServiceImpl extends ClientService implements AdminService {
     }
 
     @Override
-    public boolean login(String email, String password) throws SQLException, CouponSystemException {
+    public boolean login(String email, String password) {
         return Objects.equals(email, "admin@admin.com") || Objects.equals(password, "admin");
     }
 }
