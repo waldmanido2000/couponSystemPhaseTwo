@@ -12,6 +12,8 @@ import javax.transaction.Transactional;
 public interface CustomerRepo extends JpaRepository<Customer, Integer> {
     boolean existsByEmailAndPassword(String email, String password);
 
+    Customer findFirstByEmailAndPassword(String email, String password);
+
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO `coupon-system-phase-two`.`customers_coupons` (`customer_id`, `coupons_id`) VALUES (?,?);", nativeQuery = true)

@@ -11,11 +11,14 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+
 @Service
-public class CompanyServiceImpl extends ClientService implements CompanyService{
+public class CompanyServiceImpl extends ClientService implements CompanyService {
     @Override
     public boolean login(String email, String password) throws CouponSecurityException {
-        if(companyRepo.existsByEmailAndPassword(email,password)){
+        if (companyRepo.existsByEmailAndPassword(email, password)) {
+            int companyId = companyRepo.findFirstByEmailAndPassword(email, password).getId();
+            tokenService.addClient(companyId, ClientType.COMPANY);
             return true;
         }
         throw new CouponSecurityException(SecurityMessage.LOGIN_FAIL);
@@ -24,8 +27,8 @@ public class CompanyServiceImpl extends ClientService implements CompanyService{
     @Override
     public void addCoupon(int companyId, Coupon coupon) throws CouponSystemException {
         Company company = companyRepo.findById(companyId)
-                .orElseThrow(()->new CouponSystemException(ErrorMessage.COMPANY_NOT_EXIST));
-        if (couponRepo.existsByCompany_idAndTitle(companyId,coupon.getTitle())) {
+                .orElseThrow(() -> new CouponSystemException(ErrorMessage.COMPANY_NOT_EXIST));
+        if (couponRepo.existsByCompany_idAndTitle(companyId, coupon.getTitle())) {
             throw new CouponSystemException(ErrorMessage.COMPANY_COUPON_EXISTS_BY_TITLE);
         }
         coupon.setCompany(company);
@@ -35,8 +38,8 @@ public class CompanyServiceImpl extends ClientService implements CompanyService{
     @Override
     public void updateCoupon(int companyId, int couponId, Coupon coupon) throws SQLException, CouponSystemException {
         Coupon coupon1 = couponRepo.findById(couponId)
-                .orElseThrow(()->new CouponSystemException(ErrorMessage.COUPON_NOT_EXIST));
-        if(coupon1.getCompany().getId()!=companyId){
+                .orElseThrow(() -> new CouponSystemException(ErrorMessage.COUPON_NOT_EXIST));
+        if (coupon1.getCompany().getId() != companyId) {
             throw new CouponSystemException(ErrorMessage.COUPON_NOT_EXIST);
         }
         coupon.setCompany(coupon1.getCompany());
@@ -47,8 +50,8 @@ public class CompanyServiceImpl extends ClientService implements CompanyService{
     @Override
     public void deleteCoupon(int companyId, int couponId) throws SQLException, CouponSystemException {
         Coupon coupon1 = couponRepo.findById(couponId)
-                .orElseThrow(()->new CouponSystemException(ErrorMessage.COUPON_NOT_EXIST));
-        if (coupon1.getCompany().getId()!=companyId) {
+                .orElseThrow(() -> new CouponSystemException(ErrorMessage.COUPON_NOT_EXIST));
+        if (coupon1.getCompany().getId() != companyId) {
             throw new CouponSystemException(ErrorMessage.COUPON_NOT_EXIST);
         }
         couponRepo.deletePurchases(couponId);

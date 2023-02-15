@@ -144,7 +144,7 @@ public class AdminServiceTesting extends ServicesTesting implements CommandLineR
     private void updateCustomer(int customerId, Customer customer) throws SQLException {
         failDescription("|--->\tadmin update customer (customer not exists)");
         try {
-            adminService.updateCustomer(900,customer);
+            adminService.updateCustomer(900, customer);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (CouponSystemException e) {
@@ -153,7 +153,7 @@ public class AdminServiceTesting extends ServicesTesting implements CommandLineR
         successDescription("|--->\tadmin update customer success");
         customer.setPassword("updated password");
         try {
-            adminService.updateCustomer(customerId,customer);
+            adminService.updateCustomer(customerId, customer);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (CouponSystemException e) {
@@ -187,8 +187,7 @@ public class AdminServiceTesting extends ServicesTesting implements CommandLineR
             Customer customer = adminService.getOneCustomer(customerId);
             System.out.printf("id = %s, first name = %s, last name = %s, email = %s, password = %s\n%n",
                     customer.getId(), customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getPassword());
-        }
-        catch (CouponSystemException e) {
+        } catch (CouponSystemException e) {
             System.out.println(e.getMessage());
         }
     }

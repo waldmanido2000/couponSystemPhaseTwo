@@ -46,28 +46,28 @@ public class CustomerServiceTesting extends ServicesTesting implements CommandLi
         failDescription("|--->\tcustomer purchaseCoupon (coupon already purchased)");
         coupon.setId(6);
         try {
-            customerService.purchaseCoupon(customerId,coupon);
+            customerService.purchaseCoupon(customerId, coupon);
         } catch (CouponSystemException e) {
             System.out.println(e.getMessage());
         }
         failDescription("|--->\tcustomer purchaseCoupon (coupon amount 0)");
         coupon.setId(11);
         try {
-            customerService.purchaseCoupon(customerId,coupon);
+            customerService.purchaseCoupon(customerId, coupon);
         } catch (CouponSystemException e) {
             System.out.println(e.getMessage());
         }
         failDescription("|--->\tcustomer purchaseCoupon (coupon is obsolete)");
         coupon.setId(13);
         try {
-            customerService.purchaseCoupon(customerId,coupon);
+            customerService.purchaseCoupon(customerId, coupon);
         } catch (CouponSystemException e) {
             System.out.println(e.getMessage());
         }
         successDescription("|--->\tcustomer purchaseCoupon success");
         coupon.setId(couponId);
         try {
-            customerService.purchaseCoupon(customerId,coupon);
+            customerService.purchaseCoupon(customerId, coupon);
         } catch (CouponSystemException e) {
             System.out.println(e.getMessage());
         }
@@ -79,10 +79,12 @@ public class CustomerServiceTesting extends ServicesTesting implements CommandLi
         successDescription("|--->\tCoupons by category success");
         customerService.getCustomerCoupons(customerId, category).forEach(System.out::println);
     }
+
     private void getCustomerCoupons(int customerId, double maxPrice) throws SQLException {
         successDescription("|--->\tCoupons by max price success");
         customerService.getCustomerCoupons(customerId, maxPrice).forEach(System.out::println);
     }
+
     private void getCustomerDetails(int customerId) throws SQLException {
         successDescription("|--->\tcustomer get details success");
         try {
@@ -90,8 +92,7 @@ public class CustomerServiceTesting extends ServicesTesting implements CommandLi
             System.out.printf("id = %s, first name = %s, last name = %s, email = %s, password = %s\n",
                     customer.getId(), customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getPassword());
             customer.getCoupons().forEach(System.out::println);
-        }
-        catch (CouponSystemException e) {
+        } catch (CouponSystemException e) {
             System.out.println(e.getMessage());
         }
     }

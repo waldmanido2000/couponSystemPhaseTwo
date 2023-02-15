@@ -1,7 +1,6 @@
 package com.jb.couponSystemPhaseTwo.services;
 
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
-import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.repos.CompanyRepo;
 import com.jb.couponSystemPhaseTwo.repos.CouponRepo;
 import com.jb.couponSystemPhaseTwo.repos.CustomerRepo;
@@ -18,5 +17,8 @@ public abstract class ClientService {
     protected CustomerRepo customerRepo;
     @Autowired
     protected CouponRepo couponRepo;
+    @Autowired
+    protected TokenServiceImpl tokenService;
+
     public abstract boolean login(String email, String password) throws SQLException, CouponSecurityException;
 }

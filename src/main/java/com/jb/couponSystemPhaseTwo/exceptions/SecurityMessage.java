@@ -1,8 +1,10 @@
 package com.jb.couponSystemPhaseTwo.exceptions;
 
 import com.jb.couponSystemPhaseTwo.utils.MessageColor;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public enum SecurityMessage {
     LOGIN_FAIL("login details do not match", HttpStatus.UNAUTHORIZED);
 
@@ -16,7 +18,4 @@ public enum SecurityMessage {
         this.Status = Status;
     }
 
-    public String getMessage() {
-        return Message;
-    }
 }

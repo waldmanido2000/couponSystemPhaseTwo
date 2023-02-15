@@ -18,6 +18,8 @@ public class CustomerServiceImpl extends ClientService implements CustomerServic
     @Override
     public boolean login(String email, String password) throws CouponSecurityException {
         if (customerRepo.existsByEmailAndPassword(email, password)) {
+            int customerId = customerRepo.findFirstByEmailAndPassword(email, password).getId();
+            tokenService.addClient(customerId, ClientType.CUSTOMER);
             return true;
         }
         throw new CouponSecurityException(SecurityMessage.LOGIN_FAIL);

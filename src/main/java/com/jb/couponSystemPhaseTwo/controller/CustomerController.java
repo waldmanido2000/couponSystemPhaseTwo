@@ -12,8 +12,12 @@ import java.util.List;
 @RestController
 public interface CustomerController {
     void purchaseCoupon(int customerId, Coupon coupon) throws CouponSystemException, SQLException;
+
     List<Coupon> getCustomerCoupons(int customerId) throws SQLException;
+
     List<Coupon> getCustomerCoupons(int customerId, Category category) throws SQLException;
+
     List<Coupon> getCustomerCoupons(int customerId, double maxPrice) throws SQLException;
+
     Customer getCustomerDetails(int customerId) throws CouponSystemException, SQLException;
 }

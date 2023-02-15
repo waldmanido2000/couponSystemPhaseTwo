@@ -15,7 +15,7 @@ import java.time.LocalDate;
 
 @Component
 @Order(4)
-public class CompanyServiceTesting extends ServicesTesting implements CommandLineRunner{
+public class CompanyServiceTesting extends ServicesTesting implements CommandLineRunner {
     private final int companyId = 1;
     private final Coupon coupon = Coupon.builder()
             .description("description...............")
@@ -41,6 +41,7 @@ public class CompanyServiceTesting extends ServicesTesting implements CommandLin
         getCompanyDetails();
         controlDescription("\t\ttesting companyService ended\n");
     }
+
     private void addCoupon() throws SQLException {
 
         controlDescription("|--->\tcompany coupons");
@@ -62,6 +63,7 @@ public class CompanyServiceTesting extends ServicesTesting implements CommandLin
         controlDescription("|--->\tcompany coupons");
         companyService.getCompanyCoupons(companyId).forEach(System.out::println);
     }
+
     private void updateCoupon() throws SQLException {
         failDescription("|--->\tcompany updateCoupon (wrong coupon id)");
         try {
@@ -80,6 +82,7 @@ public class CompanyServiceTesting extends ServicesTesting implements CommandLin
         controlDescription("|--->\tcompany coupons");
         companyService.getCompanyCoupons(companyId).forEach(System.out::println);
     }
+
     private void deleteCoupon() throws SQLException {
         failDescription("|--->\tcompany deleteCoupon (not exist)");
         try {
@@ -96,6 +99,7 @@ public class CompanyServiceTesting extends ServicesTesting implements CommandLin
         controlDescription("|--->\tcompany coupons");
         companyService.getCompanyCoupons(companyId).forEach(System.out::println);
     }
+
     private void getCompanyCoupons() throws SQLException {
         successDescription("|--->\tcompany getCompanyCoupons by category");
         companyService.getCompanyCoupons(companyId, Category.CLOTHES).forEach(System.out::println);
@@ -105,6 +109,7 @@ public class CompanyServiceTesting extends ServicesTesting implements CommandLin
 
         successDescription("|--->\tcompany getCompanyDetails");
     }
+
     private void getCompanyDetails() throws SQLException {
         try {
             Company company = companyService.getCompanyDetails(companyId);

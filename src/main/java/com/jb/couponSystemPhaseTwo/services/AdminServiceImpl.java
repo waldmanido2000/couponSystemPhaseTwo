@@ -99,6 +99,10 @@ public class AdminServiceImpl extends ClientService implements AdminService {
 
     @Override
     public boolean login(String email, String password) {
-        return Objects.equals(email, "admin@admin.com") && Objects.equals(password, "admin");
+        boolean res = Objects.equals(email, "admin@admin.com") && Objects.equals(password, "admin");
+        if (res) {
+            tokenService.addClient(0, ClientType.ADMINISTRATOR);
+        }
+        return res;
     }
 }
