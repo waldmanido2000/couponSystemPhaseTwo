@@ -1,6 +1,5 @@
 package com.jb.couponSystemPhaseTwo.beans;
 
-import com.jb.couponSystemPhaseTwo.CouponSystemPhaseTwoApplication;
 import lombok.*;
 
 import javax.persistence.*;

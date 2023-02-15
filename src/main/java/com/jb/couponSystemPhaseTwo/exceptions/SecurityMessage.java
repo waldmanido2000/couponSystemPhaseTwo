@@ -8,10 +8,10 @@ public enum SecurityMessage {
 
     private final String Message;
     private final HttpStatus Status;
-    private final String TEXT_COLOR = MessageColor.ANSI_RED.getTextColor();
-    private final String TEXT_RESET = MessageColor.ANSI_RESET.getTextColor()+MessageColor.ANSI_BG_BLACK.getTextColor();
 
     SecurityMessage(String message, HttpStatus Status) {
+        String TEXT_COLOR = MessageColor.ANSI_RED.getTextColor();
+        String TEXT_RESET = MessageColor.ANSI_RESET.getTextColor() + MessageColor.ANSI_BG_BLACK.getTextColor();
         this.Message = String.format("%s\t\t* CouponSystemException: %s *\t\t%s\n", TEXT_COLOR, message, TEXT_RESET);
         this.Status = Status;
     }

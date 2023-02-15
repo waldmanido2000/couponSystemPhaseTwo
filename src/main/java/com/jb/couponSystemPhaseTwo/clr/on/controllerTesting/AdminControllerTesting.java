@@ -2,6 +2,9 @@ package com.jb.couponSystemPhaseTwo.clr.on.controllerTesting;
 
 import com.jb.couponSystemPhaseTwo.beans.Company;
 import com.jb.couponSystemPhaseTwo.beans.Customer;
+import com.jb.couponSystemPhaseTwo.dto.LoginReqDto;
+import com.jb.couponSystemPhaseTwo.dto.LoginResDto;
+import com.jb.couponSystemPhaseTwo.services.ClientType;
 import com.jb.couponSystemPhaseTwo.utils.MessageColor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -50,6 +53,26 @@ public class AdminControllerTesting extends ControllerTesting implements Command
             .email("email@address.com")
             .password("updated pass")
             .build();
+    private final LoginReqDto loginAdminDto = LoginReqDto.builder()
+            .email("admin@admin.com")
+            .password("admin")
+            .clientType(ClientType.ADMINISTRATOR)
+            .build();
+    private final LoginReqDto loginCompanyDto = LoginReqDto.builder()
+            .email("email@myaddress.com")
+            .password("new pass")
+            .clientType(ClientType.COMPANY)
+            .build();
+    private final LoginReqDto loginCustomerDto = LoginReqDto.builder()
+            .email("email@address.com")
+            .password("updated pass")
+            .clientType(ClientType.CUSTOMER)
+            .build();
+    private final LoginReqDto loginFailDto = LoginReqDto.builder()
+            .email("admin@wrong.com")
+            .password("adfmin")
+            .clientType(ClientType.ADMINISTRATOR)
+            .build();
 
     @Override
     public void run(String... args) throws Exception {
@@ -72,6 +95,10 @@ public class AdminControllerTesting extends ControllerTesting implements Command
         deleteCustomer(7);
         deleteCustomer(7);
         getOneCustomer(8);
+        login(loginAdminDto);
+        login(loginCompanyDto);
+        login(loginCustomerDto);
+        login(loginFailDto);
         controlDescription("\t\ttesting adminController ended\n");
     }
 
@@ -178,10 +205,21 @@ public class AdminControllerTesting extends ControllerTesting implements Command
         try {
             ResponseEntity<Customer> res = restTemplate.exchange(url + "/customers/" + customerId, HttpMethod.GET, null, new ParameterizedTypeReference<Customer>() {
             });
-            controlDescription("|--->\tadmin getOneCustomer success. response status is: " + (res.getStatusCodeValue()));
+            successDescription("|--->\tadmin getOneCustomer success. response status is: " + (res.getStatusCodeValue()));
             System.out.println(res.getBody());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
+
+    private void login(LoginReqDto loginReqDto) {
+        HttpEntity<LoginReqDto> add = new HttpEntity<>(loginReqDto);
+        try {
+            ResponseEntity<LoginResDto> res = restTemplate.exchange(url + "/login", HttpMethod.POST, add, LoginResDto.class);
+            successDescription("|--->\tlogin success. response status is: " + (res.getStatusCodeValue()));
+        } catch (Exception e) {
+            failDescription("|--->\tlogin fail: " + e.getMessage()); // Print exception message here
+        }
+    }
+
 }
