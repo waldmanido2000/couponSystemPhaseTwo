@@ -17,10 +17,17 @@ public class CouponSystemAdvice {
         return new ErrorDetails(e.getMessage());
     }
 
+    //    @ExceptionHandler(value = {CouponSecurityException.class})
+//    public ResponseEntity<?> handleCouponSecurityException(CouponSecurityException e) {
+//        ErrorDetails error = ErrorDetails.builder().value(e.getMessage()).build();
+//        HttpStatus status = e.getStatus();
+//        return new ResponseEntity<>(error, status);
+//    }
     @ExceptionHandler(value = {CouponSecurityException.class})
-    public ResponseEntity<?> handleCouponSecurityException(CouponSecurityException e) {
+    public ResponseEntity<ErrorDetails> handleCouponSecurityException(CouponSecurityException e) {
         ErrorDetails error = ErrorDetails.builder().value(e.getMessage()).build();
         HttpStatus status = e.getStatus();
         return new ResponseEntity<>(error, status);
     }
+
 }

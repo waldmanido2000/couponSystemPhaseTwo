@@ -3,17 +3,17 @@ package com.jb.couponSystemPhaseTwo.clr.on.controllerTesting;
 import com.jb.couponSystemPhaseTwo.beans.Company;
 import com.jb.couponSystemPhaseTwo.beans.Customer;
 import com.jb.couponSystemPhaseTwo.dto.LoginReqDto;
-import com.jb.couponSystemPhaseTwo.dto.LoginResDto;
+import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
+import com.jb.couponSystemPhaseTwo.exceptions.SecurityMessage;
 import com.jb.couponSystemPhaseTwo.services.ClientType;
 import com.jb.couponSystemPhaseTwo.utils.MessageColor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.Objects;
@@ -79,7 +79,7 @@ public class AdminControllerTesting extends ControllerTesting implements Command
     public void run(String... args) throws Exception {
         System.out.println(banner);
         controlDescription("\t\ttesting adminController\n");
-        getAllCompanies();
+        getAllCompanies(UUID.randomUUID());
         addCompany(company);
         addCompany(company);
         updateCompany(1000, companyToUpdate);
@@ -109,7 +109,7 @@ public class AdminControllerTesting extends ControllerTesting implements Command
         try {
             ResponseEntity<Company> res = restTemplate.exchange(url + "/companies", HttpMethod.POST, add, Company.class);
             successDescription("|--->\tadmin addCompany success. response status is: " + (res.getStatusCodeValue()));
-            getAllCompanies();
+            getAllCompanies(UUID.randomUUID());
         } catch (Exception e) {
             failDescription("|--->\tadmin addCompany fail");
             System.out.println(e.getMessage());
@@ -122,7 +122,7 @@ public class AdminControllerTesting extends ControllerTesting implements Command
             HttpEntity<Company> update = new HttpEntity<>(company);
             ResponseEntity<Company> res = restTemplate.exchange(url + "/companies/" + companyId, HttpMethod.PUT, update, Company.class);
             successDescription("|--->\tadmin updateCompany success. response status is: " + (res.getStatusCodeValue()));
-            getAllCompanies();
+            getAllCompanies(UUID.randomUUID());
         } catch (Exception e) {
             failDescription("|--->\tadmin updateCompany fail");
             System.out.println(e.getMessage());
@@ -133,18 +133,29 @@ public class AdminControllerTesting extends ControllerTesting implements Command
         try {
             ResponseEntity<Company> res = restTemplate.exchange(url + "/companies/" + companyId, HttpMethod.DELETE, null, Company.class);
             successDescription("|--->\tadmin deleteCompany success. response status is: " + (res.getStatusCodeValue()));
-            getAllCompanies();
+            getAllCompanies(UUID.randomUUID());
         } catch (Exception e) {
             failDescription("|--->\tadmin deleteCompany fail");
             System.out.println(e.getMessage());
         }
     }
 
-    private void getAllCompanies() {
-        ResponseEntity<List<Company>> res = restTemplate.exchange(url + "/companies", HttpMethod.GET, null, new ParameterizedTypeReference<List<Company>>() {
-        });
-        controlDescription("|--->\tadmin getAllCompanies. response status is: " + (res.getStatusCodeValue()));
-        Objects.requireNonNull(res.getBody()).forEach(System.out::println);
+    private void getAllCompanies(UUID token) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", token.toString());
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
+
+        try {
+            ResponseEntity<List<Company>> res =
+                    restTemplate.exchange(url + "/companies", HttpMethod.GET, entity, new ParameterizedTypeReference<List<Company>>() {
+                    });
+            successDescription("|--->\tadmin getAllCompanies success. response status is: " + (res.getStatusCodeValue()));
+            controlDescription("|--->\tadmin getAllCompanies. response status is: " + (res.getStatusCodeValue()));
+            Objects.requireNonNull(res.getBody()).forEach(System.out::println);
+        } catch (Exception e) {
+            failDescription("|--->\tadmin getAllCompanies fail");
+            System.out.println(e.getMessage());
+        }
     }
 
     private void getOneCompany(int companyId) {
@@ -218,9 +229,18 @@ public class AdminControllerTesting extends ControllerTesting implements Command
         try {
             ResponseEntity<UUID> res = restTemplate.exchange(url + "/login", HttpMethod.POST, add, UUID.class);
             successDescription("|--->\tlogin success. response status is: " + (res.getStatusCodeValue()));
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                try {
+                    throw new CouponSecurityException(SecurityMessage.LOGIN_FAIL);
+                } catch (CouponSecurityException ex) {
+                    failDescription("|--->\tlogin fail: " + ex.getStatus().value() + ex.getMessage()); // Print exception message here
+                }
+            }
         } catch (Exception e) {
             failDescription("|--->\tlogin fail: " + e.getMessage()); // Print exception message here
         }
     }
+
 
 }

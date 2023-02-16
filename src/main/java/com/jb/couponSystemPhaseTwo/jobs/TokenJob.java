@@ -15,7 +15,7 @@ public class TokenJob {
     @Scheduled(fixedRate = 60000) // Run every 60 seconds
     public void deleteObsoleteTokens() {
         LocalDateTime now = LocalDateTime.now();
-        System.out.println("running TokenJob");
+        System.out.println("running TokenJob " + now);
         tokenService.clearExpiredTokens(now);
     }
 }

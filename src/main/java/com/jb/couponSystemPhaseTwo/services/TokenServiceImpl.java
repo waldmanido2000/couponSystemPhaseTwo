@@ -6,10 +6,7 @@ import com.jb.couponSystemPhaseTwo.security.LoginInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -52,23 +49,11 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public void clearTokens() {
-        map.clear();
-    }
-
-    @Override
     public void clearExpiredTokens(LocalDateTime now) {
-        System.out.println(now);
-        List<UUID> keysToRemove = new ArrayList<>();
-        for (Map.Entry<UUID, LoginInfo> entry : map.entrySet()) {
-            LoginInfo value = entry.getValue();
-            if (Duration.between(value.getTime(), now).toSeconds() > 60) {
-                keysToRemove.add(entry.getKey());
-            }
-        }
-        keysToRemove.forEach(key -> map.remove(key));
+        map.values().removeIf(obj -> obj.getTime().isBefore(LocalDateTime.now().minusMinutes(30)));
         map.forEach((key, value) -> System.out.println("Key: " + key.toString() + ", Value: " + value.getTime()));
     }
+
     public UUID getToken(LoginInfo loginInfo) throws CouponSecurityException {
         // Look for an existing LoginInfo with the same ID
         for (UUID key : map.keySet()) {
@@ -84,6 +69,19 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public boolean isValid(UUID token, ClientType clientType) {
+        LoginInfo loginInfo = map.get(token);
+        if (loginInfo != null) {
+            return loginInfo.getClientType().equals(clientType);
+        }
         return false;
+    }
+
+    @Override
+    public int getClientId(UUID token) throws CouponSecurityException {
+        LoginInfo loginInfo = map.get(token);
+        if (loginInfo != null) {
+            return loginInfo.getId();
+        }
+        throw new CouponSecurityException(SecurityMessage.RESTRICTED_AREA);
     }
 }

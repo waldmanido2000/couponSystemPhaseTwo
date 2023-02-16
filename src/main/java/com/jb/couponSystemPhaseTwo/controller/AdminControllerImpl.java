@@ -2,8 +2,12 @@ package com.jb.couponSystemPhaseTwo.controller;
 
 import com.jb.couponSystemPhaseTwo.beans.Company;
 import com.jb.couponSystemPhaseTwo.beans.Customer;
+import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
+import com.jb.couponSystemPhaseTwo.exceptions.SecurityMessage;
 import com.jb.couponSystemPhaseTwo.services.AdminService;
+import com.jb.couponSystemPhaseTwo.services.ClientType;
+import com.jb.couponSystemPhaseTwo.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -11,14 +15,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api")
 @CrossOrigin(origins = "*")
-public class AdminControllerImpl implements AdminService {
+public class AdminControllerImpl implements AdminController {
     @Autowired
     @Qualifier("adminServiceImpl")
     private AdminService adminService;
+    @Autowired
+    private TokenService tokenService;
 
     @Override
     @PostMapping("companies")
@@ -45,7 +52,10 @@ public class AdminControllerImpl implements AdminService {
 
     @Override
     @GetMapping("companies")
-    public List<Company> getAllCompanies() throws SQLException {
+    public List<Company> getAllCompanies(@RequestHeader("Authorization") UUID token) throws SQLException, CouponSecurityException {
+        if (!tokenService.isValid(token, ClientType.ADMINISTRATOR)) {
+            throw new CouponSecurityException(SecurityMessage.RESTRICTED_AREA);
+        }
         return adminService.getAllCompanies();
     }
 
