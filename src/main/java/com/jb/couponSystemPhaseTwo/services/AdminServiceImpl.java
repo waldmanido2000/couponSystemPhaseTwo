@@ -3,13 +3,18 @@ package com.jb.couponSystemPhaseTwo.services;
 import com.jb.couponSystemPhaseTwo.beans.Company;
 import com.jb.couponSystemPhaseTwo.beans.Coupon;
 import com.jb.couponSystemPhaseTwo.beans.Customer;
+import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.exceptions.ErrorMessage;
+import com.jb.couponSystemPhaseTwo.exceptions.SecurityMessage;
+import com.jb.couponSystemPhaseTwo.security.LoginInfo;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class AdminServiceImpl extends ClientService implements AdminService {
@@ -98,11 +103,18 @@ public class AdminServiceImpl extends ClientService implements AdminService {
     }
 
     @Override
-    public boolean login(String email, String password) {
+    public UUID login(String email, String password) throws CouponSecurityException {
         boolean res = Objects.equals(email, "admin@admin.com") && Objects.equals(password, "admin");
         if (res) {
-            tokenService.addClient(0, ClientType.ADMINISTRATOR);
+            int adminId = 0;
+            tokenService.addClient(adminId, ClientType.ADMINISTRATOR);
+            LoginInfo loginInfo = LoginInfo.builder()
+                    .id(adminId)
+                    .clientType(ClientType.ADMINISTRATOR)
+                    .time(LocalDateTime.now())
+                    .build();
+            return tokenService.getToken(loginInfo);
         }
-        return res;
+        throw new CouponSecurityException(SecurityMessage.LOGIN_FAIL);
     }
 }

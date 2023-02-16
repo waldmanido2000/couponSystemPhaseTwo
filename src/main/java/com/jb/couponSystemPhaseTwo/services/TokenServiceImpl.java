@@ -1,5 +1,7 @@
 package com.jb.couponSystemPhaseTwo.services;
 
+import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
+import com.jb.couponSystemPhaseTwo.exceptions.SecurityMessage;
 import com.jb.couponSystemPhaseTwo.security.LoginInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -67,6 +69,18 @@ public class TokenServiceImpl implements TokenService {
         keysToRemove.forEach(key -> map.remove(key));
         map.forEach((key, value) -> System.out.println("Key: " + key.toString() + ", Value: " + value.getTime()));
     }
+    public UUID getToken(LoginInfo loginInfo) throws CouponSecurityException {
+        // Look for an existing LoginInfo with the same ID
+        for (UUID key : map.keySet()) {
+            LoginInfo existingLoginInfo = map.get(key);
+            if (existingLoginInfo.getId() == loginInfo.getId()) {
+                // Found an existing LoginInfo with the same ID
+                return key;
+            }
+        }
+        throw new CouponSecurityException(SecurityMessage.LOGIN_FAIL);
+    }
+
 
     @Override
     public boolean isValid(UUID token, ClientType clientType) {

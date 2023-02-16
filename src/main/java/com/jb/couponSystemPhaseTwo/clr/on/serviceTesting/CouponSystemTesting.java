@@ -1,5 +1,6 @@
 package com.jb.couponSystemPhaseTwo.clr.on.serviceTesting;
 
+import com.jb.couponSystemPhaseTwo.dto.LoginReqDto;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.services.*;
@@ -11,6 +12,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
+import java.util.UUID;
 
 @Component
 @Order(2)
@@ -57,35 +59,80 @@ public class CouponSystemTesting extends ServicesTesting implements CommandLineR
     }
 
     private void adminLogin() throws SQLException, CouponSystemException {
-        ClientService clientService;
+        LoginReqDto wrongCredentials = LoginReqDto.builder()
+                .email(WRONG_EMAIL)
+                .password(WRONG_PASSWORD)
+                .clientType(ClientType.ADMINISTRATOR)
+                .build();
+        LoginReqDto wrongClientType = LoginReqDto.builder()
+                .email(ADMIN_EMAIL)
+                .password(ADMIN_PASSWORD)
+                .clientType(ClientType.COMPANY)
+                .build();
+        LoginReqDto correct = LoginReqDto.builder()
+                .email(ADMIN_EMAIL)
+                .password(ADMIN_PASSWORD)
+                .clientType(ClientType.ADMINISTRATOR)
+                .build();
+        UUID token;
         failDescription("|--->\tadmin login testing wrong details");
-        clientService = testLogin(WRONG_EMAIL, WRONG_PASSWORD, ClientType.ADMINISTRATOR);
+        token = testLogin(wrongCredentials);
         failDescription("|--->\tadmin login testing wrong Client type");
-        clientService = testLogin(ADMIN_EMAIL, ADMIN_PASSWORD, ClientType.COMPANY);
+        token = testLogin(wrongClientType);
         successDescription("|--->\tadmin login testing success");
-        clientService = testLogin(ADMIN_EMAIL, ADMIN_PASSWORD, ClientType.ADMINISTRATOR);
+        token = testLogin(correct);
     }
     private void companyLogin() throws SQLException, CouponSystemException {
-        ClientService clientService;
+        LoginReqDto wrongCredentials = LoginReqDto.builder()
+                .email(WRONG_EMAIL)
+                .password(WRONG_PASSWORD)
+                .clientType(ClientType.COMPANY)
+                .build();
+        LoginReqDto wrongClientType = LoginReqDto.builder()
+                .email(COMPANY_EMAIL)
+                .password(COMPANY_PASSWORD)
+                .clientType(ClientType.CUSTOMER)
+                .build();
+        LoginReqDto correct = LoginReqDto.builder()
+                .email(COMPANY_EMAIL)
+                .password(COMPANY_PASSWORD)
+                .clientType(ClientType.COMPANY)
+                .build();
+        UUID token;
         failDescription("|--->\tcompany login testing wrong details");
-        clientService = testLogin(WRONG_EMAIL, WRONG_PASSWORD, ClientType.COMPANY);
+        token = testLogin(wrongCredentials);
         failDescription("|--->\tcompany login testing wrong Client type");
-        clientService = testLogin(COMPANY_EMAIL, COMPANY_PASSWORD, ClientType.CUSTOMER);
+        token = testLogin(wrongClientType);
         successDescription("|--->\tcompany login testing success");
-        clientService = testLogin(COMPANY_EMAIL, COMPANY_PASSWORD, ClientType.COMPANY);
+        token = testLogin(correct);
     }
     private void custmoerLogin() throws SQLException, CouponSystemException {
-        ClientService clientService;
+        LoginReqDto wrongCredentials = LoginReqDto.builder()
+                .email(WRONG_EMAIL)
+                .password(WRONG_PASSWORD)
+                .clientType(ClientType.CUSTOMER)
+                .build();
+        LoginReqDto wrongClientType = LoginReqDto.builder()
+                .email(CUSTOMER_EMAIL)
+                .password(CUSTOMER_PASSWORD)
+                .clientType(ClientType.ADMINISTRATOR)
+                .build();
+        LoginReqDto correct = LoginReqDto.builder()
+                .email(COMPANY_EMAIL)
+                .password(COMPANY_PASSWORD)
+                .clientType(ClientType.CUSTOMER)
+                .build();
+        UUID token;
         failDescription("|--->\tcustomer login testing wrong details");
-        clientService = testLogin(WRONG_EMAIL, WRONG_PASSWORD, ClientType.CUSTOMER);
+        token = testLogin(wrongCredentials);
         failDescription("|--->\tcustomer login testing wrong Client type");
-        clientService = testLogin(CUSTOMER_EMAIL, CUSTOMER_PASSWORD, ClientType.ADMINISTRATOR);
+        token = testLogin(wrongClientType);
         successDescription("|--->\tcustomer login testing success");
-        clientService = testLogin(CUSTOMER_EMAIL, CUSTOMER_PASSWORD, ClientType.CUSTOMER);
+        token = testLogin(correct);
     }
-    private ClientService testLogin(String email, String password, ClientType clientType) throws SQLException {
+    private UUID testLogin(LoginReqDto loginReqDto) throws SQLException {
         try {
-            return loginManager.login(email, password, clientType);
+            return loginManager.login(loginReqDto);
         } catch (CouponSecurityException e) {
             System.out.println(e.getMessage());
         }

@@ -7,20 +7,28 @@ import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.exceptions.ErrorMessage;
 import com.jb.couponSystemPhaseTwo.exceptions.SecurityMessage;
+import com.jb.couponSystemPhaseTwo.security.LoginInfo;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CustomerServiceImpl extends ClientService implements CustomerService {
     @Override
-    public boolean login(String email, String password) throws CouponSecurityException {
+    public UUID login(String email, String password) throws CouponSecurityException {
         if (customerRepo.existsByEmailAndPassword(email, password)) {
             int customerId = customerRepo.findFirstByEmailAndPassword(email, password).getId();
             tokenService.addClient(customerId, ClientType.CUSTOMER);
-            return true;
+            LoginInfo loginInfo = LoginInfo.builder()
+                    .id(customerId)
+                    .clientType(ClientType.CUSTOMER)
+                    .time(LocalDateTime.now())
+                    .build();
+            return tokenService.getToken(loginInfo);
         }
         throw new CouponSecurityException(SecurityMessage.LOGIN_FAIL);
     }

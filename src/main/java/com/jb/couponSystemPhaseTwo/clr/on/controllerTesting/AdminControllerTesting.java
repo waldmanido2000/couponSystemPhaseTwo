@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Component
 @Order(11)
@@ -215,7 +216,7 @@ public class AdminControllerTesting extends ControllerTesting implements Command
     private void login(LoginReqDto loginReqDto) {
         HttpEntity<LoginReqDto> add = new HttpEntity<>(loginReqDto);
         try {
-            ResponseEntity<LoginResDto> res = restTemplate.exchange(url + "/login", HttpMethod.POST, add, LoginResDto.class);
+            ResponseEntity<UUID> res = restTemplate.exchange(url + "/login", HttpMethod.POST, add, UUID.class);
             successDescription("|--->\tlogin success. response status is: " + (res.getStatusCodeValue()));
         } catch (Exception e) {
             failDescription("|--->\tlogin fail: " + e.getMessage()); // Print exception message here

@@ -9,10 +9,11 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public interface CustomerService {
-    boolean login(String email, String password) throws SQLException, CouponSystemException, CouponSecurityException;
+    UUID login(String email, String password) throws SQLException, CouponSystemException, CouponSecurityException;
 
     void purchaseCoupon(int customerId, Coupon coupon) throws SQLException, CouponSystemException;
 

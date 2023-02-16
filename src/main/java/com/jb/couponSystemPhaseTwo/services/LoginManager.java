@@ -1,5 +1,6 @@
 package com.jb.couponSystemPhaseTwo.services;
 
+import com.jb.couponSystemPhaseTwo.dto.LoginReqDto;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
 import com.jb.couponSystemPhaseTwo.exceptions.SecurityMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
+import java.util.UUID;
 
 @Component
 public class LoginManager {
@@ -19,10 +21,10 @@ public class LoginManager {
     @Qualifier("adminServiceImpl")
     private AdminService adminService;
 
-    public ClientService login(String email, String password, ClientType clientType) throws SQLException, CouponSecurityException {
+    public UUID login(LoginReqDto loginReqDto) throws SQLException, CouponSecurityException {
         ClientService clientService = null;
         boolean success;
-        switch (clientType.ordinal()) {
+        switch (loginReqDto.getClientType().ordinal()) {
             case 0:
                 System.out.println("AdminService is being used.");
                 clientService = (ClientService) adminService;
@@ -40,13 +42,6 @@ public class LoginManager {
             throw new CouponSecurityException(SecurityMessage.LOGIN_FAIL);
         }
 
-        success = clientService.login(email, password);
-
-        if (success) {
-            System.out.println("login success (LoginManager)");
-            return clientService;
-        }
-
-        throw new CouponSecurityException(SecurityMessage.LOGIN_FAIL);
+        return clientService.login(loginReqDto.getEmail(), loginReqDto.getPassword());
     }
 }
