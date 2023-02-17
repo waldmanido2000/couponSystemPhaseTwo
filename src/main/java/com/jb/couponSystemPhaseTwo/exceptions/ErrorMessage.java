@@ -20,7 +20,7 @@ public enum ErrorMessage {
     private final String TEXT_RESET = MessageColor.ANSI_RESET.getTextColor() + MessageColor.ANSI_BG_BLACK.getTextColor();
 
     ErrorMessage(String message) {
-        this.Message = String.format("%s\t\t* CouponSystemException: %s *\t\t%s\n", TEXT_COLOR, message, TEXT_RESET);
+        this.Message = message;
     }
 
     public String getMessage() {
