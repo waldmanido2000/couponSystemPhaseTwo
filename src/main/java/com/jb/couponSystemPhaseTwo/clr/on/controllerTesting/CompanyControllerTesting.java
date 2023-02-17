@@ -10,14 +10,13 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-@Component
+//@Component
 @Order(12)
 public class CompanyControllerTesting extends ControllerTesting implements CommandLineRunner {
     @Value("${company_url}")

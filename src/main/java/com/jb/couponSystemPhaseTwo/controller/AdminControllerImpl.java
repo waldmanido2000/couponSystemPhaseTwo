@@ -30,7 +30,10 @@ public class AdminControllerImpl implements AdminController {
     @Override
     @PostMapping("companies")
     @ResponseStatus(HttpStatus.CREATED)
-    public Company addCompany(@RequestBody Company company) throws SQLException, CouponSystemException {
+    public Company addCompany(@RequestBody Company company, @RequestHeader("Authorization") UUID token) throws SQLException, CouponSystemException, CouponSecurityException {
+        if (!tokenService.isValid(token, ClientType.ADMINISTRATOR)) {
+            throw new CouponSecurityException(SecurityMessage.RESTRICTED_AREA);
+        }
         adminService.addCompany(company);
         return company;
     }
@@ -38,7 +41,10 @@ public class AdminControllerImpl implements AdminController {
     @Override
     @PutMapping("companies/{companyId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Company updateCompany(@PathVariable int companyId, @RequestBody Company company) throws SQLException, CouponSystemException {
+    public Company updateCompany(@PathVariable int companyId, @RequestBody Company company, @RequestHeader("Authorization") UUID token) throws SQLException, CouponSystemException, CouponSecurityException {
+        if (!tokenService.isValid(token, ClientType.ADMINISTRATOR)) {
+            throw new CouponSecurityException(SecurityMessage.RESTRICTED_AREA);
+        }
         adminService.updateCompany(companyId, company);
         return company;
     }
@@ -46,7 +52,10 @@ public class AdminControllerImpl implements AdminController {
     @Override
     @DeleteMapping("companies/{companyId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCompany(@PathVariable int companyId) throws SQLException, CouponSystemException {
+    public void deleteCompany(@PathVariable int companyId, @RequestHeader("Authorization") UUID token) throws SQLException, CouponSystemException, CouponSecurityException {
+        if (!tokenService.isValid(token, ClientType.ADMINISTRATOR)) {
+            throw new CouponSecurityException(SecurityMessage.RESTRICTED_AREA);
+        }
         adminService.deleteCompany(companyId);
     }
 
@@ -61,40 +70,58 @@ public class AdminControllerImpl implements AdminController {
 
     @Override
     @GetMapping("companies/{id}")
-    public Company getOneCompany(@PathVariable("id") int companyId) throws SQLException, CouponSystemException {
+    public Company getOneCompany(@PathVariable("id") int companyId, @RequestHeader("Authorization") UUID token) throws SQLException, CouponSystemException, CouponSecurityException {
+        if (!tokenService.isValid(token, ClientType.ADMINISTRATOR)) {
+            throw new CouponSecurityException(SecurityMessage.RESTRICTED_AREA);
+        }
         return adminService.getOneCompany(companyId);
     }
 
     @Override
     @PostMapping("customers")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addCustomer(@RequestBody Customer customer) throws SQLException, CouponSystemException {
+    public void addCustomer(@RequestBody Customer customer, @RequestHeader("Authorization") UUID token) throws SQLException, CouponSystemException, CouponSecurityException {
+        if (!tokenService.isValid(token, ClientType.ADMINISTRATOR)) {
+            throw new CouponSecurityException(SecurityMessage.RESTRICTED_AREA);
+        }
         adminService.addCustomer(customer);
     }
 
     @Override
     @PutMapping("customers/{customerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateCustomer(@PathVariable int customerId, @RequestBody Customer customer) throws SQLException, CouponSystemException {
+    public void updateCustomer(@PathVariable int customerId, @RequestBody Customer customer, @RequestHeader("Authorization") UUID token) throws SQLException, CouponSystemException, CouponSecurityException {
+        if (!tokenService.isValid(token, ClientType.ADMINISTRATOR)) {
+            throw new CouponSecurityException(SecurityMessage.RESTRICTED_AREA);
+        }
         adminService.updateCustomer(customerId, customer);
     }
 
     @Override
     @DeleteMapping("customers/{customerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCustomer(@PathVariable int customerId) throws SQLException, CouponSystemException {
+    public void deleteCustomer(@PathVariable int customerId, @RequestHeader("Authorization") UUID token) throws SQLException, CouponSystemException, CouponSecurityException {
+        if (!tokenService.isValid(token, ClientType.ADMINISTRATOR)) {
+            throw new CouponSecurityException(SecurityMessage.RESTRICTED_AREA);
+        }
         adminService.deleteCustomer(customerId);
     }
 
     @Override
     @GetMapping("customers")
-    public List<Customer> getAllCustomers() throws SQLException {
+    public List<Customer> getAllCustomers(@RequestHeader("Authorization") UUID token) throws SQLException, CouponSecurityException {
+        if (!tokenService.isValid(token, ClientType.ADMINISTRATOR)) {
+            throw new CouponSecurityException(SecurityMessage.RESTRICTED_AREA);
+        }
         return adminService.getAllCustomers();
     }
 
     @Override
     @GetMapping("customers/{id}")
-    public Customer getOneCustomer(@PathVariable("id") int customerId) throws SQLException, CouponSystemException {
+    public Customer getOneCustomer(@PathVariable("id") int customerId, @RequestHeader("Authorization") UUID token) throws SQLException, CouponSystemException, CouponSecurityException {
+        if (!tokenService.isValid(token, ClientType.ADMINISTRATOR)) {
+            throw new CouponSecurityException(SecurityMessage.RESTRICTED_AREA);
+        }
         return adminService.getOneCustomer(customerId);
     }
 }

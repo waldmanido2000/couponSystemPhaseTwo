@@ -12,24 +12,24 @@ import java.util.UUID;
 
 @RestController
 public interface AdminController {
-    Company addCompany(Company company) throws SQLException, CouponSystemException;
+    Company addCompany(Company company, UUID token) throws SQLException, CouponSystemException, CouponSecurityException;
 
-    Company updateCompany(int companyId, Company company) throws SQLException, CouponSystemException;
+    Company updateCompany(int companyId, Company company, UUID token) throws SQLException, CouponSystemException, CouponSecurityException;
 
-    void deleteCompany(int companyId) throws SQLException, CouponSystemException;
+    void deleteCompany(int companyId, UUID token) throws SQLException, CouponSystemException, CouponSecurityException;
 
     List<Company> getAllCompanies(UUID token) throws SQLException, CouponSecurityException;
 
-    Company getOneCompany(int companyId) throws SQLException, CouponSystemException;
+    Company getOneCompany(int companyId, UUID token) throws SQLException, CouponSystemException, CouponSecurityException;
 
     // customers functions
-    void addCustomer(Customer customer) throws SQLException, CouponSystemException;
+    void addCustomer(Customer customer, UUID token) throws SQLException, CouponSystemException, CouponSecurityException;
 
-    void updateCustomer(int customerId, Customer customer) throws SQLException, CouponSystemException;
+    void updateCustomer(int customerId, Customer customer, UUID token) throws SQLException, CouponSystemException, CouponSecurityException;
 
-    void deleteCustomer(int customerId) throws SQLException, CouponSystemException;
+    void deleteCustomer(int customerId, UUID token) throws SQLException, CouponSystemException, CouponSecurityException;
 
-    List<Customer> getAllCustomers() throws SQLException;
+    List<Customer> getAllCustomers(UUID token) throws SQLException, CouponSecurityException;
 
-    Customer getOneCustomer(int customerId) throws SQLException, CouponSystemException;
+    Customer getOneCustomer(int customerId, UUID token) throws SQLException, CouponSystemException, CouponSecurityException;
 }
