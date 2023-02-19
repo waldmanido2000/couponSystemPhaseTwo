@@ -3,6 +3,7 @@ package com.jb.couponSystemPhaseTwo.services;
 import com.jb.couponSystemPhaseTwo.beans.Company;
 import com.jb.couponSystemPhaseTwo.beans.Coupon;
 import com.jb.couponSystemPhaseTwo.beans.Customer;
+import com.jb.couponSystemPhaseTwo.dto.LoginResDto;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.exceptions.ErrorMessage;
@@ -103,7 +104,7 @@ public class AdminServiceImpl extends ClientService implements AdminService {
     }
 
     @Override
-    public UUID login(String email, String password) throws CouponSecurityException {
+    public LoginResDto login(String email, String password) throws CouponSecurityException {
         boolean res = Objects.equals(email, "admin@admin.com") && Objects.equals(password, "admin");
         if (res) {
             int adminId = 0;
@@ -113,7 +114,13 @@ public class AdminServiceImpl extends ClientService implements AdminService {
                     .clientType(ClientType.ADMINISTRATOR)
                     .time(LocalDateTime.now())
                     .build();
-            return tokenService.getToken(loginInfo);
+            UUID token = tokenService.getToken(loginInfo);
+            System.out.println(token + "555555555555555555");
+            return LoginResDto.builder()
+                    .id(adminId)
+                    .token(token)
+                    .clientType(ClientType.CUSTOMER)
+                    .build();
         }
         throw new CouponSecurityException(SecurityMessage.LOGIN_FAIL);
     }

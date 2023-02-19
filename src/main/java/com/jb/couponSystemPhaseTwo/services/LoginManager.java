@@ -1,6 +1,7 @@
 package com.jb.couponSystemPhaseTwo.services;
 
 import com.jb.couponSystemPhaseTwo.dto.LoginReqDto;
+import com.jb.couponSystemPhaseTwo.dto.LoginResDto;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
 import com.jb.couponSystemPhaseTwo.exceptions.SecurityMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
-import java.util.UUID;
 
 @Component
 public class LoginManager {
@@ -21,7 +21,7 @@ public class LoginManager {
     @Qualifier("adminServiceImpl")
     private AdminService adminService;
 
-    public UUID login(LoginReqDto loginReqDto) throws SQLException, CouponSecurityException {
+    public LoginResDto login(LoginReqDto loginReqDto) throws SQLException, CouponSecurityException {
         ClientService clientService = null;
         boolean success;
         switch (loginReqDto.getClientType().ordinal()) {

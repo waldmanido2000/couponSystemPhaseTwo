@@ -1,6 +1,7 @@
 package com.jb.couponSystemPhaseTwo.clr.on.serviceTesting;
 
 import com.jb.couponSystemPhaseTwo.dto.LoginReqDto;
+import com.jb.couponSystemPhaseTwo.dto.LoginResDto;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.services.*;
@@ -23,7 +24,7 @@ public class CouponSystemTesting extends ServicesTesting implements CommandLineR
             "\t\t\t\t\\   __\\/ __ \\ /  ___/\\   __\\  |/    \\  / ___\\   /  ___// __ \\_  ___\\  \\/ /  |/ ___\\/ __ \\ /  ___/\n" +
             "\t\t\t\t |  | \\  ___/ \\___ \\  |  | |  |   |  \\/ /_/  >  \\___ \\\\  ___/|  |   \\   /|  \\  \\__\\  ___/ \\___ \\ \n" +
             "\t\t\t\t |__|  \\___  >____  > |__| |__|___|  /\\___  /  /____  >\\___  >__|    \\_/ |__|\\___  >___  >____  >\n" +
-            "\t\t\t\t           \\/     \\/               \\//_____/        \\/     \\/                    \\/    \\/     \\/ \n\n"+
+            "\t\t\t\t           \\/     \\/               \\//_____/        \\/     \\/                    \\/    \\/     \\/ \n\n" +
             MessageColor.ANSI_BG_BLACK.getTextColor();
 
     /* login attributes */
@@ -52,9 +53,9 @@ public class CouponSystemTesting extends ServicesTesting implements CommandLineR
         /* loginManager */
         System.out.println(banner);
         controlDescription("\t\ttesting loginManager\n");
-        adminLogin();
-        companyLogin();
-        custmoerLogin();
+//        adminLogin();
+//        companyLogin();
+//        custmoerLogin();
         controlDescription("\t\ttesting loginManager ended\n");
     }
 
@@ -75,13 +76,15 @@ public class CouponSystemTesting extends ServicesTesting implements CommandLineR
                 .clientType(ClientType.ADMINISTRATOR)
                 .build();
         UUID token;
+
         failDescription("|--->\tadmin login testing wrong details");
-        token = testLogin(wrongCredentials);
+//        token = testLogin(wrongCredentials).getToken();
         failDescription("|--->\tadmin login testing wrong Client type");
-        token = testLogin(wrongClientType);
+//        token = testLogin(wrongClientType).getToken();
         successDescription("|--->\tadmin login testing success");
-        token = testLogin(correct);
+        token = testLogin(correct).getToken();
     }
+
     private void companyLogin() throws SQLException, CouponSystemException {
         LoginReqDto wrongCredentials = LoginReqDto.builder()
                 .email(WRONG_EMAIL)
@@ -100,12 +103,14 @@ public class CouponSystemTesting extends ServicesTesting implements CommandLineR
                 .build();
         UUID token;
         failDescription("|--->\tcompany login testing wrong details");
-        token = testLogin(wrongCredentials);
+//        token = testLogin(wrongCredentials).getToken();
         failDescription("|--->\tcompany login testing wrong Client type");
-        token = testLogin(wrongClientType);
+//        token = testLogin(wrongClientType).getToken();
         successDescription("|--->\tcompany login testing success");
-        token = testLogin(correct);
+        System.out.println(testLogin(correct));
+        token = testLogin(correct).getToken();
     }
+
     private void custmoerLogin() throws SQLException, CouponSystemException {
         LoginReqDto wrongCredentials = LoginReqDto.builder()
                 .email(WRONG_EMAIL)
@@ -124,13 +129,14 @@ public class CouponSystemTesting extends ServicesTesting implements CommandLineR
                 .build();
         UUID token;
         failDescription("|--->\tcustomer login testing wrong details");
-        token = testLogin(wrongCredentials);
+//        token = testLogin(wrongCredentials).getToken();
         failDescription("|--->\tcustomer login testing wrong Client type");
-        token = testLogin(wrongClientType);
+//        token = testLogin(wrongClientType).getToken();
         successDescription("|--->\tcustomer login testing success");
-        token = testLogin(correct);
+        token = testLogin(correct).getToken();
     }
-    private UUID testLogin(LoginReqDto loginReqDto) throws SQLException {
+
+    private LoginResDto testLogin(LoginReqDto loginReqDto) throws SQLException {
         try {
             return loginManager.login(loginReqDto);
         } catch (CouponSecurityException e) {

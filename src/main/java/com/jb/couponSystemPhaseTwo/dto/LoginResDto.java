@@ -15,4 +15,5 @@ import java.util.UUID;
 public class LoginResDto {
     private UUID token;
     private ClientType clientType;
+    private int id;
 }

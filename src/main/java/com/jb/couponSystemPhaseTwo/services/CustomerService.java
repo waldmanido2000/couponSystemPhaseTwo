@@ -3,17 +3,17 @@ package com.jb.couponSystemPhaseTwo.services;
 import com.jb.couponSystemPhaseTwo.beans.Category;
 import com.jb.couponSystemPhaseTwo.beans.Coupon;
 import com.jb.couponSystemPhaseTwo.beans.Customer;
+import com.jb.couponSystemPhaseTwo.dto.LoginResDto;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public interface CustomerService {
-    UUID login(String email, String password) throws SQLException, CouponSystemException, CouponSecurityException;
+    LoginResDto login(String email, String password) throws SQLException, CouponSystemException, CouponSecurityException;
 
     void purchaseCoupon(int customerId, Coupon coupon) throws SQLException, CouponSystemException;
 

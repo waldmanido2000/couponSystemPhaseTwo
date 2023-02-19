@@ -1,5 +1,6 @@
 package com.jb.couponSystemPhaseTwo.services;
 
+import com.jb.couponSystemPhaseTwo.dto.LoginResDto;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
 import com.jb.couponSystemPhaseTwo.repos.CompanyRepo;
 import com.jb.couponSystemPhaseTwo.repos.CouponRepo;
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.UUID;
 
 @Service
 public abstract class ClientService {
@@ -21,5 +21,5 @@ public abstract class ClientService {
     @Autowired
     protected TokenServiceImpl tokenService;
 
-    public abstract UUID login(String email, String password) throws SQLException, CouponSecurityException;
+    public abstract LoginResDto login(String email, String password) throws SQLException, CouponSecurityException;
 }

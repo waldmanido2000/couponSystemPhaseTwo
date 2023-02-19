@@ -3,7 +3,7 @@ package com.jb.couponSystemPhaseTwo.utils;
 import java.lang.reflect.Field;
 
 public class Debug {
-    private static final boolean SHOW_CALLING_CLASS = false; // show / hide the calling class of each method
+    private static final boolean SHOW_CALLING_CLASS = true; // show / hide the calling class of each method
     private static final boolean TEST_DEBUG_MODE = true; // show / hide Test method tracking
     private static final boolean JOB_DEBUG_MODE = true; // show / hide daily job method tracking
     private static final boolean DB_MANAGER_DEBUG_MODE = false; //show / hide database setup by DatabaseManager methods

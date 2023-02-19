@@ -3,6 +3,7 @@ package com.jb.couponSystemPhaseTwo.services;
 import com.jb.couponSystemPhaseTwo.beans.Category;
 import com.jb.couponSystemPhaseTwo.beans.Company;
 import com.jb.couponSystemPhaseTwo.beans.Coupon;
+import com.jb.couponSystemPhaseTwo.dto.LoginResDto;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSecurityException;
 import com.jb.couponSystemPhaseTwo.exceptions.CouponSystemException;
 import com.jb.couponSystemPhaseTwo.exceptions.ErrorMessage;
@@ -18,16 +19,22 @@ import java.util.UUID;
 @Service
 public class CompanyServiceImpl extends ClientService implements CompanyService {
     @Override
-    public UUID login(String email, String password) throws CouponSecurityException {
+    public LoginResDto login(String email, String password) throws CouponSecurityException {
         if (companyRepo.existsByEmailAndPassword(email, password)) {
             int companyId = companyRepo.findFirstByEmailAndPassword(email, password).getId();
             tokenService.addClient(companyId, ClientType.COMPANY);
             LoginInfo loginInfo = LoginInfo.builder()
                     .id(companyId)
-                    .clientType(ClientType.COMPANY)
+                    .clientType(ClientType.CUSTOMER)
                     .time(LocalDateTime.now())
                     .build();
-            return tokenService.getToken(loginInfo);
+            UUID token = tokenService.getToken(loginInfo);
+            System.out.println(token + "555555555555555555");
+            return LoginResDto.builder()
+                    .id(companyId)
+                    .token(token)
+                    .clientType(ClientType.CUSTOMER)
+                    .build();
         }
         throw new CouponSecurityException(SecurityMessage.LOGIN_FAIL);
     }
