@@ -30,7 +30,6 @@ public class CustomerServiceImpl extends ClientService implements CustomerServic
                     .time(LocalDateTime.now())
                     .build();
             UUID token = tokenService.getToken(loginInfo);
-            System.out.println(token + "555555555555555555");
             return LoginResDto.builder()
                     .id(customerId)
                     .token(token)

@@ -25,15 +25,14 @@ public class CompanyServiceImpl extends ClientService implements CompanyService 
             tokenService.addClient(companyId, ClientType.COMPANY);
             LoginInfo loginInfo = LoginInfo.builder()
                     .id(companyId)
-                    .clientType(ClientType.CUSTOMER)
+                    .clientType(ClientType.COMPANY)
                     .time(LocalDateTime.now())
                     .build();
             UUID token = tokenService.getToken(loginInfo);
-            System.out.println(token + "555555555555555555");
             return LoginResDto.builder()
                     .id(companyId)
                     .token(token)
-                    .clientType(ClientType.CUSTOMER)
+                    .clientType(ClientType.COMPANY)
                     .build();
         }
         throw new CouponSecurityException(SecurityMessage.LOGIN_FAIL);

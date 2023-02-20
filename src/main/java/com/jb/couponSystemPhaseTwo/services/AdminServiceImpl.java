@@ -115,7 +115,6 @@ public class AdminServiceImpl extends ClientService implements AdminService {
                     .time(LocalDateTime.now())
                     .build();
             UUID token = tokenService.getToken(loginInfo);
-            System.out.println(token + "555555555555555555");
             return LoginResDto.builder()
                     .id(adminId)
                     .token(token)
