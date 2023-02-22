@@ -55,14 +55,17 @@ public class Init implements CommandLineRunner {
     private void addCompanies() {
         showDescription("\n|--->\tadding companies to DB\n");
         List<Company> companies = new ArrayList<>();
-        List<String> emails = Arrays.asList("acme@gmail.com", "contoso@gmail.com", "adatum@gmail.com", "northwind@gmail.com", "proseware@gmail.com");
-        List<String> passwords = Arrays.asList("acme123", "contoso123", "adatum123", "northwind123", "proseware123");
-        List<String> names = Arrays.asList("Acme Inc.", "Contoso Ltd.", "Adatum Corp.", "Northwind Traders", "Proseware Inc.");
+        List<String> emails = Arrays.asList("acme@gmail.com", "contoso@gmail.com", "adatum@gmail.com", "northwind@gmail.com",
+                "proseware@gmail.com", "noacme@gmail.com", "nocontoso@gmail.com", "noadatum@gmail.com", "nonorthwind@gmail.com", "noproseware@gmail.com");
+        List<String> passwords = Arrays.asList("acme123", "contoso123", "adatum123", "northwind123",
+                "proseware123", "noacme123", "nocontoso123", "noadatum123", "nonorthwind123", "noproseware123");
+        List<String> names = Arrays.asList("Acme Inc.", "Contoso Ltd.", "Adatum Corp.", "Northwind Traders",
+                "Proseware Inc.", "noAcme Inc.", "noContoso Ltd.", "noAdatum Corp.", "noNorthwind Traders", "noProseware Inc.");
         for (int i = 0; i < 10; i++) {
             companies.add(Company.builder()
-                    .email(emails.get(i % 5))
-                    .password(passwords.get(i % 5))
-                    .name(names.get(i % 5))
+                    .email(emails.get(i))
+                    .password(passwords.get(i))
+                    .name(names.get(i))
                     .build());
         }
         companyRepo.saveAll(companies);
